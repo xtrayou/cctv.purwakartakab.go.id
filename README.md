@@ -1,70 +1,128 @@
-# Getting Started with Create React App
+# Papais CCTV - Purwakarta 📹
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Website monitoring CCTV modern untuk Kabupaten Purwakarta menggunakan React.js
 
-## Available Scripts
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![React](https://img.shields.io/badge/React-18.3.1-61dafb.svg)
 
-In the project directory, you can run:
+## 🎯 Fitur Utama
 
-### `npm start`
+- ✅ **Welcome Page** - Halaman sambutan dengan video CCTV unggulan
+- ✅ **Video Page** - Halaman pemutaran video dengan sidebar thumbnail
+- ✅ **Live Indicator** - Badge "LIVE" untuk menandai feed yang aktif
+- ✅ **Search Functionality** - Fitur pencarian titik CCTV
+- ✅ **Responsive Design** - Tampilan optimal di berbagai perangkat
+- ✅ **Modern UI/UX** - Desain modern dengan gradient background
+- ✅ **Interactive Elements** - Hover effects dan smooth transitions
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Quick Start
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Installation
 
-### `npm test`
+1. **Install dependencies:**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```bash
+   npm install
+   ```
 
-### `npm run build`
+2. **Jalankan development server:**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```bash
+   npm start
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   Aplikasi akan otomatis terbuka di browser: `http://localhost:3000`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Build untuk production:**
+   ```bash
+   npm run build
+   ```
 
-### `npm run eject`
+## 📁 Struktur Project
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+cctv.purwakartakab.go.id/
+├── public/assets/          # Gambar & media files
+├── src/
+│   ├── components/
+│   │   ├── WelcomePage.jsx
+│   │   ├── WelcomePage.module.css
+│   │   ├── VideoPage.jsx
+│   │   └── VideoPage.module.css
+│   ├── App.js
+│   └── index.js
+└── package.json
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🎨 Halaman
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 1. Welcome Page
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Header dengan logo & search bar
+- Video CCTV utama dengan badge LIVE
+- Grid thumbnail video lainnya
+- "Lihat Lebih Banyak" section
 
-## Learn More
+### 2. Video Page
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Video player utama
+- Sidebar dengan thumbnail
+- Bottom carousel thumbnails
+- Informasi lokasi detail
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🎭 Navigasi
 
-### Code Splitting
+Gunakan tombol di pojok kanan bawah untuk berpindah halaman:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Welcome Page** - Halaman utama
+- **Video Page** - Halaman pemutaran
 
-### Analyzing the Bundle Size
+## 🔧 Kustomisasi
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Menambah Video CCTV
 
-### Making a Progressive Web App
+Edit `WelcomePage.jsx` atau `VideoPage.jsx`:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+const cctvLocations = [
+  {
+    id: 1,
+    title: "Nama Lokasi",
+    location: "Alamat Lengkap",
+    thumbnail: "/assets/cctv-new.jpg",
+    isLive: true,
+  },
+];
+```
 
-### Advanced Configuration
+## 🛠️ Built With
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- **React 18.3.1** - JavaScript library
+- **CSS Modules** - Scoped styling
+- **Google Fonts (Inter)** - Typography
 
-### Deployment
+## 📱 Responsive
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Desktop: > 1200px
+- Tablet: 768px - 1200px
+- Mobile: < 768px
 
-### `npm run build` fails to minify
+## 🚀 Deployment ke XAMPP
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm run build
+```
+
+Copy folder `build/` ke `C:\xampp\htdocs\cctv-purwakarta\`
+
+Akses: `http://localhost/cctv-purwakarta`
+
+## 👥 Team
+
+**Dinas Komunikasi dan Informatika Kabupaten Purwakarta**
+
+---
+
+**Made with ❤️ in Purwakarta**
+
+© 2025 Diskominfo Kabupaten Purwakarta
