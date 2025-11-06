@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from './VideoPage.module.css';
 // Pastikan path ke HlsPlayer.jsx ini benar
-import HlsPlayer from './HlsPlayer'; // <-- MENGGUNAKAN HLS.JS
-import Navbar from './navbar'; // Import komponen Navbar baru
+import HlsPlayer from '../components/HlsPlayer'; // <-- MENGGUNAKAN HLS.JS
+import Navbar from '../components/navbar'; // Import komponen Navbar baru
 
 
 // URL API backend Go Anda
