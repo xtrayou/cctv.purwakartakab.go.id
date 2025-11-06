@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Navbar.css';
+import nav from './Navbar.module.css';
 
 const Navbar = ({ 
   onLocationSelect, 
@@ -12,12 +12,12 @@ const Navbar = ({
   // Scroll effect untuk navbar
   useEffect(() => {
     const handleScroll = () => {
-      const navbar = document.querySelector(`.${styles.navbar}`);
+      const navbar = document.querySelector(`.${nav.navbar}`);
       if (navbar) {
         if (window.scrollY > 10) {
-          navbar.classList.add(styles.scrolled);
+          navbar.classList.add(nav.scrolled);
         } else {
-          navbar.classList.remove(styles.scrolled);
+          navbar.classList.remove(nav.scrolled);
         }
       }
     };
@@ -83,21 +83,21 @@ const Navbar = ({
   };
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={nav.navbar}>
       {/* Logo */}
-      <div className={styles.logo}>
+      <div className={nav.logo}>
         <img
           src="/assets/logo.png"
           alt="Logo aplikasi Papais CCTV"
           width={239}
           height={30}
-          className={styles.logoImage}
+          className={nav.logoImage}
         />
       </div>
 
       {/* Search Bar */}
-      <div className={styles.searchBar}>
-        <div className={styles.searchContainer}>
+      <div className={nav.searchBar}>
+        <div className={nav.searchContainer}>
           <input
             type="text"
             placeholder="Cari Titik..."
@@ -105,9 +105,9 @@ const Navbar = ({
             onChange={handleSearchChange}
             onFocus={() => showDropdown && setIsDropdownVisible(true)}
             onBlur={() => setTimeout(() => setIsDropdownVisible(false), 200)}
-            className={styles.searchInput}
+            className={nav.searchInput}
           />
-          <button className={styles.searchButton}>
+          <button className={nav.searchButton}>
             <svg
               width="20"
               height="20"
@@ -126,12 +126,12 @@ const Navbar = ({
           
           {/* Dropdown Results */}
           {showDropdown && isDropdownVisible && (searchQuery || filteredLocations.length > 0) && (
-            <div className={styles.searchDropdown}>
+            <div className={nav.searchDropdown}>
               {filteredLocations.length > 0 ? (
                 filteredLocations.slice(0, 10).map((location, index) => (
                   <div
                     key={index}
-                    className={styles.dropdownItem}
+                    className={nav.dropdownItem}
                     onClick={() => handleLocationSelect(location)}
                   >
                     <svg
@@ -139,7 +139,7 @@ const Navbar = ({
                       height="16"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className={styles.locationIcon}
+                      className={nav.locationIcon}
                     >
                       <path
                         d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
@@ -154,12 +154,12 @@ const Navbar = ({
                         strokeWidth="2"
                       />
                     </svg>
-                    <span className={styles.locationText}>{location}</span>
+                    <span className={nav.locationText}>{location}</span>
                   </div>
                 ))
               ) : searchQuery ? (
-                <div className={styles.dropdownItem}>
-                  <span className={styles.noResults}>Lokasi tidak ditemukan</span>
+                <div className={nav.dropdownItem}>
+                  <span className={nav.noResults}>Lokasi tidak ditemukan</span>
                 </div>
               ) : null}
             </div>

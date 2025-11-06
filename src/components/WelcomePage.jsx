@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // Pastikan path ke HlsPlayer.jsx ini benar
 import HlsPlayer from './HlsPlayer'; // <-- MENGGUNAKAN HLS.JS
 import styles from './WelcomePage.module.css'; // Tetap pakai styling Anda
+import Navbar from './navbar';
 
 // URL API backend Go Anda
 const API_URL = 'http://localhost:8000/api';
