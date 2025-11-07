@@ -1,0 +1,69 @@
+.bg {
+    align-items: start;
+    background-color: #121212;
+    display: grid;
+    justify-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.bg .group-wrapper {
+    align-items: flex-start;
+    background-color: transparent;
+    display: flex;
+    overflow: hidden;
+    padding: 0;
+}
+
+.bg .group {
+    display: flex;
+    margin-left: -100px;
+    margin-top: 1px;
+    width: 1614px;
+}
+
+.bg .div {
+    height: 925px;
+    position: relative;
+    width: 1614px;
+}
+
+.bg .ellipse {
+    aspect-ratio: 1;
+    background-color: #000cff80;
+    border-radius: 178px;
+    filter: blur(200px);
+    height: 356px;
+    left: 0;
+    position: absolute;
+    top: 391px;
+    width: 356px;
+}
+
+.bg .ellipse-2 {
+    aspect-ratio: 1;
+    background-color: #000cff80;
+    border-radius: 178px;
+    filter: blur(200px);
+    height: 356px;
+    left: 1258px;
+    position: absolute;
+    top: 0;
+    width: 356px;
+}
+
+.bg .ellipse-3 {
+    aspect-ratio: 1;
+    background-color: #ff610080;
+    border-radius: 178px;
+    filter: blur(150px);
+    height: 356px;
+    left: 100px;
+    position: absolute;
+    top: 569px;
+    width: 356px;
+}

@@ -1,58 +1,84 @@
 import './App.css';
-import { useState } from 'react';
-import WelcomePage from './components/WelcomePage';
-import VideoPage from './components/VideoPage';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import WelcomePage from './Pages/WelcomePage';
+import VideoPage from './Pages/VideoPage';
+import Siadmin from './components/Siadmin';
 
-function App() {
-  const [currentPage, setCurrentPage] = useState('welcome'); // 'welcome' or 'video'
+function NavigationButtons() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
-    <div className="App">
-      {currentPage === 'welcome' ? (
-        <WelcomePage onNavigate={() => setCurrentPage('video')} />
-      ) : (
-        <VideoPage onNavigate={() => setCurrentPage('welcome')} />
-      )}
-      
-      {/* Navigation buttons for demo */}
-      <div style={{
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        display: 'flex',
-        gap: '10px',
-        zIndex: 1000
-      }}>
-        <button
-          onClick={() => setCurrentPage('welcome')}
-          style={{
-            padding: '12px 24px',
-            background: currentPage === 'welcome' ? '#2772F8' : '#444',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontWeight: '600'
-          }}
-        >
-          Welcome Page
-        </button>
-        <button
-          onClick={() => setCurrentPage('video')}
-          style={{
-            padding: '12px 24px',
-            background: currentPage === 'video' ? '#2772F8' : '#444',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontWeight: '600'
-          }}
-        >
-          Video Page
-        </button>
-      </div>
+    <div style={{
+      position: 'fixed',
+      bottom: '20px',
+      right: '20px',
+      display: 'flex',
+      gap: '10px',
+      zIndex: 1000,
+      flexWrap: 'wrap',
+      justifyContent: 'flex-end'
+    }}>
+      <button
+        onClick={() => navigate('/')}
+        style={{
+          padding: '12px 24px',
+          background: currentPath === '/' ? '#2772F8' : '#444',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontWeight: '600'
+        }}
+      >
+        Welcome Page
+      </button>
+      <button
+        onClick={() => navigate('/video')}
+        style={{
+          padding: '12px 24px',
+          background: currentPath === '/video' ? '#2772F8' : '#444',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontWeight: '600'
+        }}
+      >
+        Video Page
+      </button>
+      <button
+        onClick={() => navigate('/siadmin')}
+        style={{
+          padding: '12px 24px',
+          background: currentPath === '/siadmin' ? '#2772F8' : '#444',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontWeight: '600'
+        }}
+      >
+        SI Admin
+      </button>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/video" element={<VideoPage />} />
+          <Route path="/siadmin" element={<Siadmin />} />
+        </Routes>
+        
+        <NavigationButtons />
+      </div>
+    </Router>
   );
 }
 

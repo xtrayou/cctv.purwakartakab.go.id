@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Camera, MapPin, Plus, Edit2, Trash2, Save, X, Eye, Video } from 'lucide-react';
+import './Siadmin.css';
+import { Bg } from './bg';
+
 
 const PapaisCCTVDashboard = () => {
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [showCameraModal, setShowCameraModal] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -103,36 +107,76 @@ const PapaisCCTVDashboard = () => {
     return cameras.filter(cam => cam.locationId === locationId).length;
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div style={styles.container}>
+    <div className="dashboard-container">
+      {/* Mobile Menu Toggle */}
+    
+      <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+        <Camera size={20} />
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-overlay" 
+          onClick={closeMobileMenu}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 999
+          }}
+        />
+      )}
+
       {/* Sidebar */}
-      <div style={styles.sidebar}>
-        <div style={styles.logo}>
+      <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+        <div className="logo">
           <Camera size={32} color="#fff" />
           <div>
-            <div style={styles.logoTitle}>Dashboard</div>
-            <div style={styles.logoSubtitle}>papais cctv</div>
+            <div className="logo-title">Dashboard</div>
+            <div className="logo-subtitle">papais cctv</div>
           </div>
         </div>
 
-        <div style={styles.menu}>
+        <div className="menu">
           <div 
-            style={{...styles.menuItem, ...(activeMenu === 'dashboard' ? styles.menuItemActive : {})}}
-            onClick={() => setActiveMenu('dashboard')}
+            className={`menu-item ${activeMenu === 'dashboard' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveMenu('dashboard');
+              closeMobileMenu();
+            }}
           >
             <MapPin size={20} />
             <span>Dashboard</span>
           </div>
           <div 
-            style={{...styles.menuItem, ...(activeMenu === 'camera' ? styles.menuItemActive : {})}}
-            onClick={() => setActiveMenu('camera')}
+            className={`menu-item ${activeMenu === 'camera' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveMenu('camera');
+              closeMobileMenu();
+            }}
           >
             <Camera size={20} />
             <span>Camera</span>
           </div>
           <div 
-            style={{...styles.menuItem, ...(activeMenu === 'location' ? styles.menuItemActive : {})}}
-            onClick={() => setActiveMenu('location')}
+            className={`menu-item ${activeMenu === 'location' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveMenu('location');
+              closeMobileMenu();
+            }}
           >
             <MapPin size={20} />
             <span>Location</span>
@@ -141,16 +185,16 @@ const PapaisCCTVDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div style={styles.main}>
-        <div style={styles.header}>
-          <div>
-            <h2 style={styles.greeting}>Selamat datang di</h2>
-            <h1 style={styles.title}>Dashboard Papais Cctv</h1>
+      <div className="main-content">
+        <div className="header">
+          <div className="header-left">
+            <h2>Selamat datang di</h2>
+            <h1>Dashboard Papais Cctv</h1>
           </div>
           <input 
             type="text" 
             placeholder="Cari Titik ..." 
-            style={styles.searchInput}
+            className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -158,49 +202,49 @@ const PapaisCCTVDashboard = () => {
 
         {/* Dashboard View */}
         {activeMenu === 'dashboard' && (
-          <div style={styles.content}>
-            <div style={styles.statsGrid}>
-              <div style={styles.statCard}>
-                <div style={styles.statIcon}>
+          <div className="content">
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-icon">
                   <Camera size={32} color="#4f46e5" />
                 </div>
                 <div>
-                  <div style={styles.statValue}>{cameras.length}</div>
-                  <div style={styles.statLabel}>Total Kamera</div>
+                  <div className="stat-value">{cameras.length}</div>
+                  <div className="stat-label">Total Kamera</div>
                 </div>
               </div>
-              <div style={styles.statCard}>
-                <div style={styles.statIcon}>
+              <div className="stat-card">
+                <div className="stat-icon">
                   <MapPin size={32} color="#10b981" />
                 </div>
                 <div>
-                  <div style={styles.statValue}>{locations.length}</div>
-                  <div style={styles.statLabel}>Total Lokasi</div>
+                  <div className="stat-value">{locations.length}</div>
+                  <div className="stat-label">Total Lokasi</div>
                 </div>
               </div>
-              <div style={styles.statCard}>
-                <div style={styles.statIcon}>
+              <div className="stat-card">
+                <div className="stat-icon">
                   <Eye size={32} color="#f59e0b" />
                 </div>
                 <div>
-                  <div style={styles.statValue}>{cameras.filter(c => c.status === 'active').length}</div>
-                  <div style={styles.statLabel}>Kamera Aktif</div>
+                  <div className="stat-value">{cameras.filter(c => c.status === 'active').length}</div>
+                  <div className="stat-label">Kamera Aktif</div>
                 </div>
               </div>
             </div>
 
-            <div style={styles.section}>
-              <h3 style={styles.sectionTitle}>Kamera Terbaru</h3>
-              <div style={styles.cameraGrid}>
+            <div className="section">
+              <h3 className="section-title">Kamera Terbaru</h3>
+              <div className="camera-grid">
                 {cameras.slice(0, 6).map(camera => (
-                  <div key={camera.id} style={styles.cameraCard}>
-                    <div style={styles.cameraPreview}>
+                  <div key={camera.id} className="camera-card">
+                    <div className="camera-preview">
                       <Video size={48} color="#6b7280" />
                     </div>
-                    <div style={styles.cameraInfo}>
-                      <h4 style={styles.cameraName}>{camera.name}</h4>
-                      <p style={styles.cameraLocation}>{getLocationName(camera.locationId)}</p>
-                      <span style={{...styles.status, ...(camera.status === 'active' ? styles.statusActive : styles.statusInactive)}}>
+                    <div className="camera-info">
+                      <h4 className="camera-name">{camera.name}</h4>
+                      <p className="camera-location">{getLocationName(camera.locationId)}</p>
+                      <span className={`status ${camera.status === 'active' ? 'status-active' : 'status-inactive'}`}>
                         {camera.status === 'active' ? 'Aktif' : 'Nonaktif'}
                       </span>
                     </div>
@@ -213,42 +257,42 @@ const PapaisCCTVDashboard = () => {
 
         {/* Camera Management */}
         {activeMenu === 'camera' && (
-          <div style={styles.content}>
-            <div style={styles.tableHeader}>
-              <h3 style={styles.sectionTitle}>Manajemen Kamera</h3>
-              <button style={styles.addButton} onClick={handleAddCamera}>
+          <div className="content">
+            <div className="table-header">
+              <h3 className="section-title">Manajemen Kamera</h3>
+              <button className="add-button" onClick={handleAddCamera}>
                 <Plus size={20} />
                 Tambah Kamera
               </button>
             </div>
-            <div style={styles.tableContainer}>
-              <table style={styles.table}>
+            <div className="table-container">
+              <table>
                 <thead>
                   <tr>
-                    <th style={styles.th}>Nama Kamera</th>
-                    <th style={styles.th}>Lokasi</th>
-                    <th style={styles.th}>IP Address</th>
-                    <th style={styles.th}>Status</th>
-                    <th style={styles.th}>Aksi</th>
+                    <th>Nama Kamera</th>
+                    <th>Lokasi</th>
+                    <th>IP Address</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {cameras.map(camera => (
-                    <tr key={camera.id} style={styles.tr}>
-                      <td style={styles.td}>{camera.name}</td>
-                      <td style={styles.td}>{getLocationName(camera.locationId)}</td>
-                      <td style={styles.td}>{camera.ip}</td>
-                      <td style={styles.td}>
-                        <span style={{...styles.status, ...(camera.status === 'active' ? styles.statusActive : styles.statusInactive)}}>
+                    <tr key={camera.id}>
+                      <td>{camera.name}</td>
+                      <td>{getLocationName(camera.locationId)}</td>
+                      <td>{camera.ip}</td>
+                      <td>
+                        <span className={`status ${camera.status === 'active' ? 'status-active' : 'status-inactive'}`}>
                           {camera.status === 'active' ? 'Aktif' : 'Nonaktif'}
                         </span>
                       </td>
-                      <td style={styles.td}>
-                        <div style={styles.actionButtons}>
-                          <button style={styles.editBtn} onClick={() => handleEditCamera(camera)}>
+                      <td>
+                        <div className="action-buttons">
+                          <button className="edit-btn" onClick={() => handleEditCamera(camera)}>
                             <Edit2 size={16} />
                           </button>
-                          <button style={styles.deleteBtn} onClick={() => handleDeleteCamera(camera.id)}>
+                          <button className="delete-btn" onClick={() => handleDeleteCamera(camera.id)}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -263,38 +307,38 @@ const PapaisCCTVDashboard = () => {
 
         {/* Location Management */}
         {activeMenu === 'location' && (
-          <div style={styles.content}>
-            <div style={styles.tableHeader}>
-              <h3 style={styles.sectionTitle}>Manajemen Lokasi</h3>
-              <button style={styles.addButton} onClick={handleAddLocation}>
+          <div className="content">
+            <div className="table-header">
+              <h3 className="section-title">Manajemen Lokasi</h3>
+              <button className="add-button" onClick={handleAddLocation}>
                 <Plus size={20} />
                 Tambah Lokasi
               </button>
             </div>
-            <div style={styles.tableContainer}>
-              <table style={styles.table}>
+            <div className="table-container">
+              <table>
                 <thead>
                   <tr>
-                    <th style={styles.th}>Nama Lokasi</th>
-                    <th style={styles.th}>Alamat</th>
-                    <th style={styles.th}>Koordinat</th>
-                    <th style={styles.th}>Jumlah Kamera</th>
-                    <th style={styles.th}>Aksi</th>
+                    <th>Nama Lokasi</th>
+                    <th>Alamat</th>
+                    <th>Koordinat</th>
+                    <th>Jumlah Kamera</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {locations.map(location => (
-                    <tr key={location.id} style={styles.tr}>
-                      <td style={styles.td}>{location.name}</td>
-                      <td style={styles.td}>{location.address}</td>
-                      <td style={styles.td}>{location.lat}, {location.lng}</td>
-                      <td style={styles.td}>{getCameraCountByLocation(location.id)}</td>
-                      <td style={styles.td}>
-                        <div style={styles.actionButtons}>
-                          <button style={styles.editBtn} onClick={() => handleEditLocation(location)}>
+                    <tr key={location.id}>
+                      <td>{location.name}</td>
+                      <td>{location.address}</td>
+                      <td>{location.lat}, {location.lng}</td>
+                      <td>{getCameraCountByLocation(location.id)}</td>
+                      <td>
+                        <div className="action-buttons">
+                          <button className="edit-btn" onClick={() => handleEditLocation(location)}>
                             <Edit2 size={16} />
                           </button>
-                          <button style={styles.deleteBtn} onClick={() => handleDeleteLocation(location.id)}>
+                          <button className="delete-btn" onClick={() => handleDeleteLocation(location.id)}>
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -310,31 +354,29 @@ const PapaisCCTVDashboard = () => {
 
       {/* Camera Modal */}
       {showCameraModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <div style={styles.modalHeader}>
-              <h3 style={styles.modalTitle}>
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3 className="modal-title">
                 {editingCamera ? 'Edit Kamera' : 'Tambah Kamera'}
               </h3>
-              <button style={styles.closeBtn} onClick={() => setShowCameraModal(false)}>
+              <button className="close-btn" onClick={() => setShowCameraModal(false)}>
                 <X size={24} />
               </button>
             </div>
-            <div style={styles.modalBody}>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Nama Kamera</label>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Nama Kamera</label>
                 <input
                   type="text"
-                  style={styles.input}
                   value={cameraForm.name}
                   onChange={(e) => setCameraForm({...cameraForm, name: e.target.value})}
                   placeholder="Masukkan nama kamera"
                 />
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Lokasi</label>
+              <div className="form-group">
+                <label>Lokasi</label>
                 <select
-                  style={styles.input}
                   value={cameraForm.locationId}
                   onChange={(e) => setCameraForm({...cameraForm, locationId: parseInt(e.target.value)})}
                 >
@@ -344,30 +386,27 @@ const PapaisCCTVDashboard = () => {
                   ))}
                 </select>
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>IP Address</label>
+              <div className="form-group">
+                <label>IP Address</label>
                 <input
                   type="text"
-                  style={styles.input}
                   value={cameraForm.ip}
                   onChange={(e) => setCameraForm({...cameraForm, ip: e.target.value})}
                   placeholder="192.168.1.100"
                 />
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Video URL</label>
+              <div className="form-group">
+                <label>Video URL</label>
                 <input
                   type="text"
-                  style={styles.input}
                   value={cameraForm.videoUrl}
                   onChange={(e) => setCameraForm({...cameraForm, videoUrl: e.target.value})}
                   placeholder="rtsp://192.168.1.100:554/stream"
                 />
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Status</label>
+              <div className="form-group">
+                <label>Status</label>
                 <select
-                  style={styles.input}
                   value={cameraForm.status}
                   onChange={(e) => setCameraForm({...cameraForm, status: e.target.value})}
                 >
@@ -376,11 +415,11 @@ const PapaisCCTVDashboard = () => {
                 </select>
               </div>
             </div>
-            <div style={styles.modalFooter}>
-              <button style={styles.cancelBtn} onClick={() => setShowCameraModal(false)}>
+            <div className="modal-footer">
+              <button className="cancel-btn" onClick={() => setShowCameraModal(false)}>
                 Batal
               </button>
-              <button style={styles.saveBtn} onClick={handleSaveCamera}>
+              <button className="save-btn" onClick={handleSaveCamera}>
                 <Save size={18} />
                 Simpan
               </button>
@@ -391,63 +430,59 @@ const PapaisCCTVDashboard = () => {
 
       {/* Location Modal */}
       {showLocationModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <div style={styles.modalHeader}>
-              <h3 style={styles.modalTitle}>
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3 className="modal-title">
                 {editingLocation ? 'Edit Lokasi' : 'Tambah Lokasi'}
               </h3>
-              <button style={styles.closeBtn} onClick={() => setShowLocationModal(false)}>
+              <button className="close-btn" onClick={() => setShowLocationModal(false)}>
                 <X size={24} />
               </button>
             </div>
-            <div style={styles.modalBody}>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Nama Lokasi</label>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Nama Lokasi</label>
                 <input
                   type="text"
-                  style={styles.input}
                   value={locationForm.name}
                   onChange={(e) => setLocationForm({...locationForm, name: e.target.value})}
                   placeholder="Masukkan nama lokasi"
                 />
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Alamat</label>
+              <div className="form-group">
+                <label>Alamat</label>
                 <input
                   type="text"
-                  style={styles.input}
                   value={locationForm.address}
                   onChange={(e) => setLocationForm({...locationForm, address: e.target.value})}
                   placeholder="Masukkan alamat lengkap"
                 />
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Latitude</label>
+              <div className="form-group">
+                <label>Latitude</label>
                 <input
                   type="text"
-                  style={styles.input}
                   value={locationForm.lat}
                   onChange={(e) => setLocationForm({...locationForm, lat: e.target.value})}
                   placeholder="-6.2088"
                 />
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Longitude</label>
+              <div className="form-group">
+                <label>Longitude</label>
                 <input
                   type="text"
-                  style={styles.input}
                   value={locationForm.lng}
                   onChange={(e) => setLocationForm({...locationForm, lng: e.target.value})}
                   placeholder="106.8456"
                 />
               </div>
             </div>
-            <div style={styles.modalFooter}>
-              <button style={styles.cancelBtn} onClick={() => setShowLocationModal(false)}>
+            <div className="modal-footer">
+              <button className="cancel-btn" onClick={() => setShowLocationModal(false)}>
                 Batal
               </button>
-              <button style={styles.saveBtn} onClick={handleSaveLocation}>
+              <button className="save-btn" onClick={handleSaveLocation}>
                 <Save size={18} />
                 Simpan
               </button>
