@@ -91,16 +91,6 @@ const VideoPage = () => {
     return `http://localhost:8000/live/${id}/index.m3u8?t=${new Date().getTime()}`;
   };
 
-  // --- RENDER ---
-
-  if (error) {
-    return <div className={styles.container}>Error: {error}</div>;
-  }
-  // Tampilkan loading jika video utama (featuredVideo) belum di-set
-  if (!featuredVideo) {
-    return <div className={styles.container}>Loading...</div>;
-  }
-
   // Jika semua sudah siap, render halaman
   return (
     <div className={styles.container}>
@@ -118,93 +108,107 @@ const VideoPage = () => {
       <main className={styles.main}>
         {/* Video Section */}
         <div className={styles.videoSection}>
-          <div className={styles.contentWrapper}>
-            {/* Main Video (TERHUBUNG) */}
-            <div className={styles.mainSection}>
-              {/* Video Player */}
-              <div className={styles.mainVideo}>
-                <span className={styles.liveBadge}>LIVE</span>
+
+          {featuredVideo ? (
+            <div className={styles.contentWrapper}>
+              {/* Main Video (TERHUBUNG) */}
+              <div className={styles.mainSection}>
+                {/* Video Player */}
+                <div className={styles.mainVideo}>
+                  <span className={styles.liveBadge}>LIVE</span>
+                  
+                  {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
+                  <HlsPlayer
+                    url={getHlsUrl(featuredVideo.id)}
+                    playing={true}
+                    controls={true}
+                    muted={true}
+                    className={styles.videoPlaceholder} // Pakai styling dari iframe
+                  />
+                  
+                  {/* (Video Controls opsional, HlsPlayer sudah punya 'controls=true') */}
+                  {/* Anda bisa hapus div styles.videoControls jika mau */}
+                </div>
                 
-                {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
-                <HlsPlayer
-                  url={getHlsUrl(featuredVideo.id)}
-                  playing={true}
-                  controls={true}
-                  muted={true}
-                  className={styles.videoPlaceholder} // Pakai styling dari iframe
-                />
-                
-                {/* (Video Controls opsional, HlsPlayer sudah punya 'controls=true') */}
-                {/* Anda bisa hapus div styles.videoControls jika mau */}
-              </div>
-              
-              {/* Video Info (TERHUBUNG) */}
-              <div className={styles.mainVideoInfo}>
-                <div className={styles.videoInfoHeader}>
-                  <div>
-                    {/* Menggunakan data dari featuredVideo */}
-                    <h2 className={styles.videoTitle}>{featuredVideo.name}</h2> 
-                    <p className={styles.videoLocation}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                      {featuredVideo.location_text}
-                    </p>
+                {/* Video Info (TERHUBUNG) */}
+                <div className={styles.mainVideoInfo}>
+                  <div className={styles.videoInfoHeader}>
+                    <div>
+                      {/* Menggunakan data dari featuredVideo */}
+                      <h2 className={styles.videoTitle}>{featuredVideo.name}</h2> 
+                      <p className={styles.videoLocation}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2"/>
+                          <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                        {featuredVideo.location_text}
+                      </p>
+                    </div>
+                    {/* ... (Tombol share) ... */}
                   </div>
-                  {/* ... (Tombol share) ... */}
+                </div>
+              </div>
+
+              {/* Sidebar with thumbnails (TERHUBUNG) */}
+              <div className={styles.sidebar}>
+                <div className={styles.tabButtons}>
+                  {/* (Logika tab 'terdekat' belum diimplementasi, sama seperti file asli) */}
+                  <button 
+                    className={`${styles.tabButton} ${activeTab === 'terdekat' ? styles.tabActive : ''}`}
+                    onClick={() => setActiveTab('terdekat')}
+                  >
+                    Terdekat
+                  </button>
+                  <button 
+                    className={`${styles.tabButton} ${activeTab === 'purwakarta' ? styles.tabActive : ''}`}
+                    onClick={() => setActiveTab('purwakarta')}
+                  >
+                    Purwakarta
+                  </button>
+                </div>
+                
+                <div className={styles.thumbnailsList}>
+                  {/* Mengganti cctvLocations.map dengan cameras.map */}
+                  {cameras.map((cam) => (
+                    <div 
+                      key={cam.id} 
+                      // Ganti logika 'active'
+                      className={`${styles.thumbnailCard} ${featuredVideo.id === cam.id ? styles.active : ''}`}
+                      onClick={() => handleThumbnailClick(cam)} // Ganti handler
+                    >
+                      <div className={styles.thumbnailImageWrapper}>
+                        {<span className={styles.thumbnailLiveBadge}>LIVE</span>}
+                        
+                        {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
+                        <HlsPlayer
+                          url={getHlsUrl(cam.id)}
+                          playing={false}
+                          controls={false}
+                          muted={true}
+                          className={styles.thumbnailImage} // Pakai styling dari iframe
+                        />
+                      </div>
+                      <div className={styles.thumbnailInfo}>
+                        <p className={styles.thumbnailTitle}>{cam.name}</p>
+                        <p className={styles.thumbnailLocation}>{cam.location_text}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-
-            {/* Sidebar with thumbnails (TERHUBUNG) */}
-            <div className={styles.sidebar}>
-              <div className={styles.tabButtons}>
-                {/* (Logika tab 'terdekat' belum diimplementasi, sama seperti file asli) */}
-                <button 
-                  className={`${styles.tabButton} ${activeTab === 'terdekat' ? styles.tabActive : ''}`}
-                  onClick={() => setActiveTab('terdekat')}
-                >
-                  Terdekat
-                </button>
-                <button 
-                  className={`${styles.tabButton} ${activeTab === 'purwakarta' ? styles.tabActive : ''}`}
-                  onClick={() => setActiveTab('purwakarta')}
-                >
-                  Purwakarta
-                </button>
-              </div>
-              
-              <div className={styles.thumbnailsList}>
-                {/* Mengganti cctvLocations.map dengan cameras.map */}
-                {cameras.map((cam) => (
-                  <div 
-                    key={cam.id} 
-                    // Ganti logika 'active'
-                    className={`${styles.thumbnailCard} ${featuredVideo.id === cam.id ? styles.active : ''}`}
-                    onClick={() => handleThumbnailClick(cam)} // Ganti handler
-                  >
-                    <div className={styles.thumbnailImageWrapper}>
-                      {<span className={styles.thumbnailLiveBadge}>LIVE</span>}
-                      
-                      {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
-                      <HlsPlayer
-                        url={getHlsUrl(cam.id)}
-                        playing={false}
-                        controls={false}
-                        muted={true}
-                        className={styles.thumbnailImage} // Pakai styling dari iframe
-                      />
-                    </div>
-                    <div className={styles.thumbnailInfo}>
-                      <p className={styles.thumbnailTitle}>{cam.name}</p>
-                      <p className={styles.thumbnailLocation}>{cam.location_text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          ) : (
+            <div className={styles.contentWrapper} style={{
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              color: 'white', 
+              minHeight: '400px', 
+              backgroundColor: '#222'
+            }}>
+              <p>{error ? "Gagal memuat video" : "Memuat data video..."}</p>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Map Section (TERHUBUNG) */}
@@ -231,34 +235,41 @@ const VideoPage = () => {
             <h3 className={styles.locationTitle}>Titik CCTV Aktif</h3>
             <div className={styles.locationGrid}>
               {/* Mengganti cctvLocations.map dengan cameras.map */}
-              {cameras.map((cam) => (
-                <div key={cam.id} className={styles.locationCard}>
-                  <div className={styles.locationCardHeader}>
-                    {<span className={styles.locationLiveBadge}>
+              {cameras.length > 0 ? (
+                cameras.map((cam) => (
+                  <div key={cam.id} className={styles.locationCard}>
+                    <div className={styles.locationCardHeader}>
+                      <span className={styles.locationLiveBadge}>
                         <span className={styles.liveDot}></span>
                         LIVE
-                      </span>}
+                      </span>
+                    </div>
+                    <h4 className={styles.locationCardTitle}>{cam.name}</h4>
+                    <p className={styles.locationCardAddress}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2"/>
+                        <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                      {cam.location_text}
+                    </p>
+                    <a 
+                      onClick={() => handleThumbnailClick(cam)} // Ganti href dengan onClick
+                      style={{cursor: 'pointer'}} // Tambahkan pointer
+                      className={styles.viewButton}
+                    >
+                      Lihat CCTV
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </a>
                   </div>
-                  <h4 className={styles.locationCardTitle}>{cam.name}</h4>
-                  <p className={styles.locationCardAddress}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2"/>
-                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
-                    </svg>
-                    {cam.location_text}
-                  </p>
-                  <a 
-                    onClick={() => handleThumbnailClick(cam)} // Ganti href dengan onClick
-                    style={{cursor: 'pointer'}} // Tambahkan pointer
-                    className={styles.viewButton}
-                  >
-                    Lihat CCTV
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </a>
+              ))
+              ) : (
+                <div style={{ color: 'white', opacity: 0.7, gridColumn: '1 / -1' }}>
+                  {error ? "Gagal memuat daftar lokasi." : "Memuat daftar lokasi..."}
                 </div>
-              ))}
+              )}
+              
             </div>
           </div>
         </div>

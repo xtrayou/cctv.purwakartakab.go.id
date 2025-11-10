@@ -81,14 +81,6 @@ const WelcomePage = () => {
     return `http://localhost:8000/live/${id}/index.m3u8?t=${new Date().getTime()}`;
   };
 
-  // --- RENDER ---
-
-  if (error) {
-    return <div className={styles.container}>Error: {error}</div>;
-  }
-  if (!featuredVideo) {
-    return <div className={styles.container}>Loading...</div>;
-  }
 
   // Render layout dari WelcomePage dengan data dinamis
   return (
@@ -119,33 +111,49 @@ const WelcomePage = () => {
           </div>
 
           {/* Video Utama (TERHUBUNG) */}
-          <div className={styles.mainVideoContainer}>
-            <div className={styles.mainVideo}>
-              <span className={styles.liveBadge}>LIVE</span>
-              
-              {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
-              <HlsPlayer
-                url={getHlsUrl(featuredVideo.id)}
-                playing={true}  // Autoplay
-                controls={true} // Tampilkan controls
-                muted={true}    // Wajib untuk autoplay
-                className={styles.videoPlaceholder} // Pakai styling dari iframe
-              />
+          {featuredVideo ? (
+            <div className={styles.mainVideoContainer}>
+              <div className={styles.mainVideo}>
+                <span className={styles.liveBadge}>LIVE</span>
+                
+                {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
+                <HlsPlayer
+                  url={getHlsUrl(featuredVideo.id)}
+                  playing={true}  // Autoplay
+                  controls={true} // Tampilkan controls
+                  muted={true}    // Wajib untuk autoplay
+                  className={styles.videoPlaceholder} // Pakai styling dari iframe
+                />
 
-              <div className={styles.videoOverlay}>
-                <div className={styles.videoInfo}>
-                  <h2 className={styles.videoTitle}>{featuredVideo.name}</h2>
-                  <p className={styles.videoLocation}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                       <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2" />
-                       <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2" />
-                    </svg>
-                    {featuredVideo.location_text}
-                  </p>
+                <div className={styles.videoOverlay}>
+                  <div className={styles.videoInfo}>
+                    <h2 className={styles.videoTitle}>{featuredVideo.name}</h2>
+                    <p className={styles.videoLocation}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2" />
+                        <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2" />
+                      </svg>
+                      {featuredVideo.location_text}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+           <div style={{
+              padding: '1rem',
+              backgroundColor: 'rgba(255, 100, 100, 0.2)',
+              border: '1px solid #ff6464',
+              color: 'white',
+              borderRadius: '8px',
+              margin: '1rem 0',
+              textAlign: 'center'
+            }}>
+              <strong>Koneksi Gagal:</strong> {error}. <br/>
+              Pastikan server sudah berjalan.
+            </div>
+          )}
+          
         </div>
 
         {/* ===== Bagian Thumbnail CCTV (TERHUBUNG) ===== */}
@@ -154,37 +162,44 @@ const WelcomePage = () => {
             <h3 className={styles.sectionTitle}>Lihat Lebih Banyak</h3>
           </div>
 
-          <div className={styles.thumbnailsGrid}>
-            {/* MENGGANTI cctvLocations.map DENGAN cameras.map */}
-            {cameras.map((cam) => (
-              <div 
-                key={cam.id} 
-                className={styles.thumbnailCard}
-                onClick={() => handleThumbnailClick(cam)} // <-- TERHUBUNG
-                style={{ cursor: 'pointer' }}
-              >
-                <div className={styles.thumbnailImageWrapper}>
-                  <span className={styles.thumbnailLiveBadge}>LIVE</span>
-                  
-                  {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
-                  <HlsPlayer
-                    url={getHlsUrl(cam.id)}
-                    playing={false} // Jangan autoplay thumbnail
-                    controls={false} // Jangan ada controls di thumbnail
-                    muted={true}
-                    className={styles.thumbnailImage} // Pakai styling dari iframe
-                  />
+          {cameras.length > 0 ? (
+            <div className={styles.thumbnailsGrid}>
+              {/* MENGGANTI cctvLocations.map DENGAN cameras.map */}
+              {cameras.map((cam) => (
+                <div 
+                  key={cam.id} 
+                  className={styles.thumbnailCard}
+                  onClick={() => handleThumbnailClick(cam)} // <-- TERHUBUNG
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className={styles.thumbnailImageWrapper}>
+                    <span className={styles.thumbnailLiveBadge}>LIVE</span>
+                    
+                    {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
+                    <HlsPlayer
+                      url={getHlsUrl(cam.id)}
+                      playing={false} // Jangan autoplay thumbnail
+                      controls={false} // Jangan ada controls di thumbnail
+                      muted={true}
+                      className={styles.thumbnailImage} // Pakai styling dari iframe
+                    />
 
-                  {/* Kita bisa hapus tombol play statis karena HlsPlayer akan memutar video kecil */}
-                  {/* <div className={styles.thumbnailPlayButton}> ... </div> */}
+                    {/* Kita bisa hapus tombol play statis karena HlsPlayer akan memutar video kecil */}
+                    {/* <div className={styles.thumbnailPlayButton}> ... </div> */}
 
-                  <div className={styles.thumbnailOverlay}>
-                    <p className={styles.thumbnailTitle}>{cam.name}</p>
+                    <div className={styles.thumbnailOverlay}>
+                      <p className={styles.thumbnailTitle}>{cam.name}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ color: 'white', opacity: 0.7, padding: '1rem 0' }}>
+              {error ? "Gagal memuat daftar kamera." : "Tidak ada kamera untuk ditampilkan."}
+            </div>
+          )}
+          
         </div>
       </main>
     </div>
