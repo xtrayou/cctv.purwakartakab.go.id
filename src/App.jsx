@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import WelcomePage from './Pages/WelcomePage';
-import VideoPage from './Pages/VideoPage';
+import WelcomePage from './pages/WelcomePage';
+import VideoPage from './pages/VideoPage';
 import Siadmin from './components/Siadmin';
 
 function NavigationButtons() {
