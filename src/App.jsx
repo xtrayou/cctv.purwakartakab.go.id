@@ -27,36 +27,6 @@ function NavigationButtons() {
       justifyContent: 'flex-end'
     }}>
       <button
-        onClick={() => navigate('/')}
-        style={{
-          padding: '12px 24px',
-          background: currentPath === '/' ? '#2772F8' : '#444',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          fontWeight: '600'
-        }}
-      >
-        Welcome Page
-      </button>
-      <button
-        // MODIFIKASI: Ubah ke '/VideoPage' (V besar)
-        onClick={() => navigate('/VideoPage')}
-        style={{
-          padding: '12px 24px',
-          // MODIFIKASI: Gunakan fungsi pengecekan baru
-          background: isVideoPageActive() ? '#2772F8' : '#444',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          fontWeight: '600'
-        }}
-      >
-        Video Page
-      </button>
-      <button
         onClick={() => navigate('/siadmin')}
         style={{
           padding: '12px 24px',
