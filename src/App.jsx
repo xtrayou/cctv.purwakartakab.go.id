@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import WelcomePage from './pages/WelcomePage';
 import VideoPage from './pages/VideoPage';
 import Siadmin from './components/Siadmin';
+import SplashScreen from './pages/splash-screen';
+import LoginPage from './pages/login-page'; 
 
 function NavigationButtons() {
   const navigate = useNavigate();
@@ -53,6 +55,10 @@ function App() {
           <Route path="/VideoPage" element={<VideoPage />} />
           <Route path="/VideoPage/:id" element={<VideoPage />} />
           <Route path="/siadmin" element={<Siadmin />} />
+          <Route path="/splashscreen" element={<SplashScreen />} />
+          <Route path="/login" element={<LoginPage />} />
+
+
         </Routes>
         
         <NavigationButtons />

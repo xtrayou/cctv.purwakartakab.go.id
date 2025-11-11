@@ -1,8 +1,5 @@
-import React from "react";
-import { PlayArrowFilledWrapper } from "./PlayArrowFilledWrapper";
-import logo from "./logo.png";
 
-export const LoginPage = () => {
+const SplashScreen = () => {
   return (
     <>
       <div className="login-page">
@@ -12,13 +9,16 @@ export const LoginPage = () => {
           <div className="ellipse-2" />
         </div>
 
-        <img className="logo" alt="Logo" src={logo} />
+        <img
+                  src="/assets/logo.png"
+                  alt="Logo aplikasi Papais CCTV"
+                />
 
         <div className="judul-wrapper">
           <div className="judul">Selamat Datang di</div>
         </div>
 
-        <PlayArrowFilledWrapper />
+
       </div>
 
       {/* CSS Langsung di File React */}
@@ -108,3 +108,5 @@ export const LoginPage = () => {
     </>
   );
 };
+
+export default SplashScreen;

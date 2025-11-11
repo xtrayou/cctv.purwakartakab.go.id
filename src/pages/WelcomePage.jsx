@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HlsPlayer from '../components/HlsPlayer';
 import styles from './WelcomePage.module.css';
-import Navbar from '../components/navbar';
+import Navbar from '../components/Navbar';
 
 const API_URL = 'http://localhost:8000/api';
 const CAMERAS_PER_PAGE = 8;
