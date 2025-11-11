@@ -4,9 +4,7 @@ import HlsPlayer from '../components/HlsPlayer';
 import styles from './WelcomePage.module.css';
 import Navbar from '../components/navbar';
 
-// URL API backend Go Anda
 const API_URL = 'http://localhost:8000/api';
-// Tentukan berapa banyak thumbnail untuk dimuat per "halaman"
 const CAMERAS_PER_PAGE = 8;
 
 const WelcomePage = () => {
@@ -17,7 +15,8 @@ const WelcomePage = () => {
   const [featuredVideo, setFeaturedVideo] = useState(null);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [visibleCamerasCount, setVisibleCamerasCount] = useState(CAMERAS_PER_PAGE);
+  const [visibleCamerasCount, setVisibleCamerasCount] = useState(CAMERAS_PER_PAGE);  
+  const [sortOrder, setSortOrder] = useState('default'); // 'default', 'asc', 'desc'
 
   const navigate = useNavigate();
 
@@ -38,17 +37,14 @@ const WelcomePage = () => {
         const locationsData = await locationsRes.json();
         const activeCameras = camerasData.filter(cam => cam.enabled);
 
-        setCameras(activeCameras);
         setAllCamerasMaster(activeCameras);
         setLocations(locationsData);
 
-        // Set video pertama sebagai video utama
         if (activeCameras.length > 0) {
           setFeaturedVideo(activeCameras[0]);
         }
 
       } catch (err) {
-        // Tangkap error 'Failed to fetch' di sini
         setError(err.message);
         console.error("Fetch error:", err);
       }
@@ -57,38 +53,51 @@ const WelcomePage = () => {
     fetchInitialData();
   }, []);
 
-  // --- Handlers ---
-  const handleSearch = (query) => {
-    setSearchQuery(query); // Tetap update input field
-    setVisibleCamerasCount(CAMERAS_PER_PAGE); // Reset pagination
+  useEffect(() => {
+    let processingList = [...allCamerasMaster];
 
-    if (query === "") {
-      // Jika query kosong, kembalikan ke daftar penuh
-      setCameras(allCamerasMaster);
-      return;
+    if (searchQuery) {
+      const lowerQuery = searchQuery.toLowerCase();
+      processingList = allCamerasMaster.filter(cam => 
+        (cam.name && cam.name.toLowerCase().includes(lowerQuery)) ||
+        (cam.location_text && cam.location_text.toLowerCase().includes(lowerQuery))
+      );
     }
 
-    const lowerQuery = query.toLowerCase();
+    if (sortOrder === 'asc') {
+      // localeCompare adalah cara yg aman untuk sort string A-Z
+      processingList.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOrder === 'desc') {
+      // Z-A
+      processingList.sort((a, b) => b.name.localeCompare(a.name));
+    }
+    setCameras(processingList);
 
-    // Filter berdasarkan 'name' ATAU 'location_text' (case-insensitive)
-    const filtered = allCamerasMaster.filter(cam => 
-      (cam.name && cam.name.toLowerCase().includes(lowerQuery)) ||
-      (cam.location_text && cam.location_text.toLowerCase().includes(lowerQuery))
-    );
-    
-    setCameras(filtered);
+  }, [searchQuery, sortOrder, allCamerasMaster]); // Dependensi
+  
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setVisibleCamerasCount(CAMERAS_PER_PAGE); // Reset pagination
+  };
+
+  // BARU: Handler untuk tombol sort
+  const handleSort = (newOrder) => {
+    if (newOrder === sortOrder) {
+      setSortOrder('default');
+    } else {
+      setSortOrder(newOrder);
+    }
+    setVisibleCamerasCount(CAMERAS_PER_PAGE); // Reset pagination
   };
 
   const handleThumbnailClick = (camera) => {
-    navigate(`/VideoPage/${camera.id}`);
+    navigate(`/VideoPage/${camera._id || camera.id}`);
   };
 
-  // Handler untuk tombol "Lihat Lebih Banyak"
   const handleLoadMore = () => {
     setVisibleCamerasCount((prevCount) => prevCount + CAMERAS_PER_PAGE);
   };
 
-  // Fungsi untuk mendapatkan URL HLS dengan cache-busting
   const getHlsUrl = (id) => {
     return `http://localhost:8000/live/${id}/index.m3u8?t=${new Date().getTime()}`;
   };
@@ -181,18 +190,32 @@ const WelcomePage = () => {
 
         {/* ===== Bagian Thumbnail CCTV (dengan pagination) ===== */}
         <div className={styles.thumbnailsSection}>
+          
           <div className={styles.sectionHeader}>
             <h3 className={styles.sectionTitle}>
               {searchQuery ? `Hasil Pencarian untuk "${searchQuery}"` : "Lihat Lebih Banyak"}
             </h3>
+            <div className={styles.sortContainer}>
+              <button
+                className={`${styles.sortButton} ${sortOrder === 'asc' ? styles.activeSort : ''}`}
+                onClick={() => handleSort('asc')}
+                title="Urutkan A-Z"
+              >
+                A-Z
+              </button>
+              <button
+                className={`${styles.sortButton} ${sortOrder === 'desc' ? styles.activeSort : ''}`}
+                onClick={() => handleSort('desc')}
+                title="Urutkan Z-A"
+              >
+                Z-A
+              </button>
+            </div>
           </div>
 
           {cameras.length > 0 ? (
             <>
               <div className={styles.thumbnailsGrid}>
-                {/* Gunakan .slice(0, visibleCamerasCount) 
-                  untuk memotong array cameras sesuai jumlah yang terlihat
-                */}
                 {cameras.slice(0, visibleCamerasCount).map((cam) => (
                   <div 
                     key={cam._id || cam.id} 
@@ -217,7 +240,7 @@ const WelcomePage = () => {
               </div>
 
               {/* Tombol "Lihat Lebih Banyak" */}
-              {!searchQuery && visibleCamerasCount < cameras.length && (
+              {visibleCamerasCount < cameras.length && (
                 <div className={styles.loadMoreContainer}>
                   <button 
                     onClick={handleLoadMore} 
@@ -229,11 +252,11 @@ const WelcomePage = () => {
               )}
             </>
           ) : (
-            // Placeholder jika kamera kosong
             <div style={{ color: 'white', opacity: 0.7, padding: '1rem 0' }}>
-              {error ? "Gagal memuat daftar kamera." : "Tidak ada kamera untuk ditampilkan."}
+              {searchQuery ? "Tidak ada kamera yang cocok dengan pencarian Anda." : (error ? "Gagal memuat kamera." : "Memuat...")}
             </div>
           )}
+          
         </div>
       </main>
     </div>

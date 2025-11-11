@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 // Komponen
 import HlsPlayer from '../components/HlsPlayer';
 import Navbar from '../components/navbar';
-// Pastikan path ini benar (Map.jsx atau MapComponent.jsx)
 import MapComponent from '../components/Map'; 
 
 // Styles
@@ -16,11 +15,8 @@ const API_URL = 'http://localhost:8000/api';
 const VideoPage = () => {
   // --- States ---
   const [cameras, setCameras] = useState([]); // Daftar yang DIFILTER (untuk sidebar)
-  const [locations, setLocations] = useState([]); // Biarkan ini, sesuai kode Anda
-  
-  // BARU: State untuk menyimpan daftar master (seperti di WelcomePage)
-  const [allCamerasMaster, setAllCamerasMaster] = useState([]); 
-  
+  const [locations, setLocations] = useState([]); 
+  const [allCamerasMaster, setAllCamerasMaster] = useState([]); // Daftar MASTER (untuk peta)
   const [featuredVideo, setFeaturedVideo] = useState(null); 
   const [error, setError] = useState(null);
   
@@ -31,9 +27,8 @@ const VideoPage = () => {
   const { id } = useParams(); 
   const navigate = useNavigate();
 
-  // --- Data Fetching ---
+  // --- Data Fetching (Tidak Berubah) ---
   useEffect(() => {
-    // Fungsi fetch ini sudah benar dan tidak error, kita biarkan
     const fetchInitialData = async () => {
       try {
         setError(null); 
@@ -48,19 +43,16 @@ const VideoPage = () => {
         }
 
         const camerasData = await camerasRes.json();
-        const locationsData = await locationsRes.json(); // Data ini tetap diambil
+        const locationsData = await locationsRes.json();
         const activeCameras = camerasData.filter(cam => cam.enabled);
 
-        // MODIFIKASI: Set kedua state (master dan yang ditampilkan)
         setCameras(activeCameras);
-        setAllCamerasMaster(activeCameras); // Simpan daftar master
-        setLocations(locationsData); // State lokasi tetap di-set
+        setAllCamerasMaster(activeCameras);
+        setLocations(locationsData);
         
-        // --- Logika untuk Memilih Video Utama (tidak berubah) ---
         if (activeCameras.length > 0) {
           let selectedCam = null;
           if (id) {
-            // Gunakan _id jika itu adalah primary key Anda
             selectedCam = activeCameras.find(cam => (cam._id || cam.id) === id);
           }
           if (selectedCam) {
@@ -75,25 +67,20 @@ const VideoPage = () => {
         console.error("Fetch error:", err); 
       }
     };
-
     fetchInitialData();
   }, [id]);
 
-  // --- Handlers ---
-
-  // MODIFIKASI: Implementasi logika pencarian client-side di sini
-  const handleSearch = (query) => {
-    setSearchQuery(query); // Update teks di search bar
-
-    if (query === "") {
+  // Hook ini akan berjalan setiap kali 'searchQuery' berubah (setiap kali Anda mengetik)
+  useEffect(() => {
+    if (searchQuery === "") {
       // Jika pencarian kosong, tampilkan SEMUA kamera di sidebar
       setCameras(allCamerasMaster);
       return;
     }
 
-    const lowerQuery = query.toLowerCase();
+    const lowerQuery = searchQuery.toLowerCase();
 
-    // Filter daftar MASTER berdasarkan 'name' dan 'location_text'
+    // Filter daftar MASTER
     const filtered = allCamerasMaster.filter(cam => 
       (cam.name && cam.name.toLowerCase().includes(lowerQuery)) ||
       (cam.location_text && cam.location_text.toLowerCase().includes(lowerQuery))
@@ -101,18 +88,35 @@ const VideoPage = () => {
     
     // Update state 'cameras' (yang terhubung ke sidebar) dengan hasil filter
     setCameras(filtered);
+    
+  }, [searchQuery, allCamerasMaster]); // Dependensi
+
+
+  // --- Handlers ---
+
+  const handleSearch = (query) => {
+    // Cek apakah 'query' adalah nama persis dari salah satu kamera
+    const clickedCamera = allCamerasMaster.find(cam => cam.name === query);
+    
+    if (clickedCamera) {
+      handleThumbnailClick(clickedCamera);
+      
+      // Update search bar dengan nama lengkap
+      setSearchQuery(clickedCamera.name);
+    } else {
+      setSearchQuery(query);
+    }
   };
   
+  // Fungsi ini (TIDAK BERUBAH) sekarang dipanggil oleh handleSearch
   const handleThumbnailClick = (camera) => {
     setFeaturedVideo(camera);
-    // Gunakan _id jika itu primary key Anda
     navigate(`/VideoPage/${camera._id || camera.id}`, { replace: true }); 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const getHlsUrl = (videoId) => {
     if (!videoId) return '';
-    // Gunakan _id jika itu primary key Anda
     return `http://localhost:8000/live/${videoId}/index.m3u8?t=${new Date().getTime()}`;
   };
 
@@ -127,10 +131,10 @@ const VideoPage = () => {
       {/* ===== Navbar ===== */}
       <Navbar 
         searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        onLocationSelect={handleSearch} // Sekarang memanggil fungsi 'handleSearch' yang sudah diisi
+        setSearchQuery={setSearchQuery} // Ini penting untuk 'useEffect'
+        onLocationSelect={handleSearch}  // Terhubung ke handleSearch baru
         showDropdown={true}
-        suggestionData={allCamerasMaster} // Kirim data master untuk saran
+        suggestionData={allCamerasMaster} 
       />
 
       {/* ... (Peringatan Error) ... */}
@@ -152,7 +156,6 @@ const VideoPage = () => {
 
       {/* ===== Konten Utama ===== */}
       <main className={styles.main}>
-        {/* --- Bagian Video --- */}
         <div className={styles.videoSection}>
           
           {featuredVideo ? (
@@ -160,7 +163,6 @@ const VideoPage = () => {
               
               {/* Video Utama (Kiri) */}
               <div className={styles.mainSection}>
-                {/* ... (Kode Video Utama Anda) ... */}
                 <span className={styles.liveBadge}>LIVE</span>
                 <HlsPlayer
                   url={getHlsUrl(featuredVideo._id || featuredVideo.id)}
@@ -169,7 +171,7 @@ const VideoPage = () => {
                   muted={true}
                   className={styles.videoPlaceholder}
                 />
-                <div className={styles.videoOverlay}>
+                <div className={styles.videoInfoBelow}>
                   <h2 className={styles.videoTitle}>{featuredVideo.name}</h2>
                   <p className={styles.videoLocation}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -184,7 +186,7 @@ const VideoPage = () => {
               {/* Sidebar Thumbnail (Kanan) */}
               <div className={styles.sidebar}>
                 
-                {/* Daftar ini sekarang akan menampilkan hasil filter */}
+                {/* Daftar ini sekarang akan menampilkan hasil filter 'real-time' */}
                 <div className={styles.thumbnailsList}>
                   {/* .map() di sini menggunakan 'cameras' (state yang difilter) */}
                   {cameras.length > 0 ? (
@@ -233,7 +235,6 @@ const VideoPage = () => {
         <div className={styles.mapSection}>
           <div className={styles.mapPlaceholder}>
             <MapComponent 
-              // MODIFIKASI: Peta harus selalu menampilkan SEMUA kamera (dari master)
               cameras={allCamerasMaster} 
               activeCamera={featuredVideo}
               onMarkerClick={handleThumbnailClick} 

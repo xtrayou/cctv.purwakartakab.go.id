@@ -211,6 +211,11 @@
 }
 
 .sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Agar rapi di layar kecil */
+  gap: 16px; /* Jarak jika wrap */
   margin-bottom: 25px;
 }
 
@@ -219,6 +224,34 @@
   font-weight: 400;
   color: #ffffff;
   margin: 0;
+}
+
+.sortContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.sortButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 14px; /* Sedikit lebih kecil dari loadMore */
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.sortButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sortButton.activeSort {
+  background-color: #2772F8; /* Warna biru utama Anda */
+  border-color: #2772F8;
+  color: white;
+  box-shadow: 0 0 10px rgba(39, 114, 248, 0.5);
 }
 
 /* --- INI ADALAH PERUBAIKAN UTAMA --- */

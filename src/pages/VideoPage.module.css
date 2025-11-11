@@ -43,11 +43,10 @@
 
 /* --- 3. Video Utama (Kiri) --- */
 .mainSection {
-  flex: 3; /* Mengambil 3 bagian dari rasio */
+  flex: 3; 
   position: relative;
-  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7);
+  padding-bottom: 20px; 
 }
 
 .videoPlaceholder {
@@ -77,14 +76,10 @@
   letter-spacing: 1px;
 }
 
-.videoOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
-  padding: 30px 25px 20px;
-  z-index: 2;
+.videoInfoBelow {
+  padding: 20px 25px 0 0; 
+  border-bottom-left-radius: 24px; 
+  border-bottom-right-radius: 24px;
 }
 
 .videoTitle {
@@ -123,36 +118,6 @@
   max-height: calc(100vh - 200px); /* Batasi tinggi, misal 100vh - (padding atas + bawah) */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-}
-
-.tabButtons {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.tabButtons button {
-  flex: 1;
-  padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.tabButtons button.activeTab {
-  background: #2772F8;
-  border-color: #2772F8;
-  color: #ffffff;
-}
-
-.tabButtons button:hover:not(.activeTab) {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
 }
 
 .thumbnailsList {
