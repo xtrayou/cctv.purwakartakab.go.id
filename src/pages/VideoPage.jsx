@@ -1,31 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import styles from './VideoPage.module.css';
-// Pastikan path ke HlsPlayer.jsx ini benar
-import HlsPlayer from '../components/HlsPlayer'; // <-- MENGGUNAKAN HLS.JS
-import Navbar from '../components/navbar'; // Import komponen Navbar baru
+import { useParams, useNavigate } from 'react-router-dom';
 
+// Komponen
+import HlsPlayer from '../components/HlsPlayer';
+import Navbar from '../components/navbar';
+// Pastikan path ini benar (Map.jsx atau MapComponent.jsx)
+import MapComponent from '../components/Map'; 
+
+// Styles
+import styles from './VideoPage.module.css';
 
 // URL API backend Go Anda
 const API_URL = 'http://localhost:8000/api';
 
 const VideoPage = () => {
-  // --- STATE DARI HomePage.jsx ---
-  const [cameras, setCameras] = useState([]);
-  const [locations, setLocations] = useState([]); // Untuk filter/pencarian di masa depan
-  const [featuredVideo, setFeaturedVideo] = useState(null); // Menggantikan 'selectedVideo'
-  const [error, setError] = useState(null);
-
-  // --- STATE ASLI DARI VideoPage.jsx ---
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('purwakarta'); // 'terdekat' or 'purwakarta'
-  // const [isPlaying, setIsPlaying] = useState(true); // Tidak perlu, di-handle oleh HlsPlayer
+  // --- States ---
+  const [cameras, setCameras] = useState([]); // Daftar yang DIFILTER (untuk sidebar)
+  const [locations, setLocations] = useState([]); // Biarkan ini, sesuai kode Anda
   
-  // --- FUNGSI useEffect DARI HomePage.jsx ---
-  // (Untuk mengambil data dari API saat halaman dimuat)
+  // BARU: State untuk menyimpan daftar master (seperti di WelcomePage)
+  const [allCamerasMaster, setAllCamerasMaster] = useState([]); 
+  
+  const [featuredVideo, setFeaturedVideo] = useState(null); 
+  const [error, setError] = useState(null);
+  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('purwakarta');
+
+  // --- React Router Hooks ---
+  const { id } = useParams(); 
+  const navigate = useNavigate();
+
+  // --- Data Fetching ---
   useEffect(() => {
+    // Fungsi fetch ini sudah benar dan tidak error, kita biarkan
     const fetchInitialData = async () => {
       try {
-        // Ambil data kamera dan lokasi secara bersamaan
+        setError(null); 
+        
         const [camerasRes, locationsRes] = await Promise.all([
           fetch(`${API_URL}/cameras`),
           fetch(`${API_URL}/locations`)
@@ -36,243 +48,199 @@ const VideoPage = () => {
         }
 
         const camerasData = await camerasRes.json();
-        const locationsData = await locationsRes.json();
-        
-        // Filter hanya kamera yang 'enabled'
+        const locationsData = await locationsRes.json(); // Data ini tetap diambil
         const activeCameras = camerasData.filter(cam => cam.enabled);
 
+        // MODIFIKASI: Set kedua state (master dan yang ditampilkan)
         setCameras(activeCameras);
-        setLocations(locationsData);
-
-        // Set video pertama sebagai video utama
+        setAllCamerasMaster(activeCameras); // Simpan daftar master
+        setLocations(locationsData); // State lokasi tetap di-set
+        
+        // --- Logika untuk Memilih Video Utama (tidak berubah) ---
         if (activeCameras.length > 0) {
-          setFeaturedVideo(activeCameras[0]);
+          let selectedCam = null;
+          if (id) {
+            // Gunakan _id jika itu adalah primary key Anda
+            selectedCam = activeCameras.find(cam => (cam._id || cam.id) === id);
+          }
+          if (selectedCam) {
+            setFeaturedVideo(selectedCam);
+          } else {
+            if(id) console.warn(`Kamera dengan ID ${id} tidak ditemukan, menampilkan default.`);
+            setFeaturedVideo(activeCameras[0]);
+          }
         }
-
       } catch (err) {
         setError(err.message);
-        console.error("Fetch error:", err);
+        console.error("Fetch error:", err); 
       }
     };
 
     fetchInitialData();
-  }, []);
+  }, [id]);
 
-  // --- FUNGSI HANDLER DARI HomePage.jsx ---
-  const handleSearch = async (query) => {
-    // Jika query kosong, reset dan tampilkan semua kamera aktif
+  // --- Handlers ---
+
+  // MODIFIKASI: Implementasi logika pencarian client-side di sini
+  const handleSearch = (query) => {
+    setSearchQuery(query); // Update teks di search bar
+
     if (query === "") {
-      try {
-        const res = await fetch(`${API_URL}/cameras`);
-        const data = await res.json();
-        setCameras(data.filter(cam => cam.enabled));
-      } catch (err) {
-        console.error("Reset search error:", err);
-      }
+      // Jika pencarian kosong, tampilkan SEMUA kamera di sidebar
+      setCameras(allCamerasMaster);
       return;
     }
-    // Jika ada query, cari ke backend
-    try {
-      const res = await fetch(`${API_URL}/cameras/search/${query}`); // Sesuai router.go
-      const data = await res.json();
-      setCameras(data); // Backend sudah memfilter
-    } catch (err) {
-      console.error("Search error:", err);
-    }
-  };
 
-  // Handler untuk mengganti video utama saat thumbnail diklik
+    const lowerQuery = query.toLowerCase();
+
+    // Filter daftar MASTER berdasarkan 'name' dan 'location_text'
+    const filtered = allCamerasMaster.filter(cam => 
+      (cam.name && cam.name.toLowerCase().includes(lowerQuery)) ||
+      (cam.location_text && cam.location_text.toLowerCase().includes(lowerQuery))
+    );
+    
+    // Update state 'cameras' (yang terhubung ke sidebar) dengan hasil filter
+    setCameras(filtered);
+  };
+  
   const handleThumbnailClick = (camera) => {
     setFeaturedVideo(camera);
+    // Gunakan _id jika itu primary key Anda
+    navigate(`/VideoPage/${camera._id || camera.id}`, { replace: true }); 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Fungsi URL HLS (tanpa cache bust, karena sudah di-handle di server)
-  const getHlsUrl = (id) => {
-    return `http://localhost:8000/live/${id}/index.m3u8?t=${new Date().getTime()}`;
+  const getHlsUrl = (videoId) => {
+    if (!videoId) return '';
+    // Gunakan _id jika itu primary key Anda
+    return `http://localhost:8000/live/${videoId}/index.m3u8?t=${new Date().getTime()}`;
   };
 
-  // Jika semua sudah siap, render halaman
+  // --- RENDER ---
   return (
     <div className={styles.container}>
-      {/* Navbar (Komponen Baru) */}
+      {/* ... (Latar belakang) ... */}
+      <div className={styles.backgroundEffects}>
+        {/* ... */}
+      </div>
+
+      {/* ===== Navbar ===== */}
       <Navbar 
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        onLocationSelect={(location) => handleSearch(location)}
+        onLocationSelect={handleSearch} // Sekarang memanggil fungsi 'handleSearch' yang sudah diisi
         showDropdown={true}
+        suggestionData={allCamerasMaster} // Kirim data master untuk saran
       />
 
-      {/* Main Content */}
+      {/* ... (Peringatan Error) ... */}
+      {error && (
+        <div style={{
+          padding: '1rem',
+          backgroundColor: 'rgba(255, 100, 100, 0.2)',
+          border: '1px solid #ff6464',
+          color: 'white',
+          borderRadius: '8px',
+          margin: '1rem 60px 0 60px',
+          textAlign: 'center',
+          zIndex: 5
+        }}>
+          <strong>Koneksi Gagal:</strong> {error}. <br/>
+          Pastikan server backend di <code>http://localhost:8000</code> sudah berjalan.
+        </div>
+      )}
 
-      {/* Main Content - Maps */}
+      {/* ===== Konten Utama ===== */}
       <main className={styles.main}>
-        {/* Video Section */}
+        {/* --- Bagian Video --- */}
         <div className={styles.videoSection}>
-
+          
           {featuredVideo ? (
             <div className={styles.contentWrapper}>
-              {/* Main Video (TERHUBUNG) */}
+              
+              {/* Video Utama (Kiri) */}
               <div className={styles.mainSection}>
-                {/* Video Player */}
-                <div className={styles.mainVideo}>
-                  <span className={styles.liveBadge}>LIVE</span>
-                  
-                  {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
-                  <HlsPlayer
-                    url={getHlsUrl(featuredVideo.id)}
-                    playing={true}
-                    controls={true}
-                    muted={true}
-                    className={styles.videoPlaceholder} // Pakai styling dari iframe
-                  />
-                  
-                  {/* (Video Controls opsional, HlsPlayer sudah punya 'controls=true') */}
-                  {/* Anda bisa hapus div styles.videoControls jika mau */}
-                </div>
-                
-                {/* Video Info (TERHUBUNG) */}
-                <div className={styles.mainVideoInfo}>
-                  <div className={styles.videoInfoHeader}>
-                    <div>
-                      {/* Menggunakan data dari featuredVideo */}
-                      <h2 className={styles.videoTitle}>{featuredVideo.name}</h2> 
-                      <p className={styles.videoLocation}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2"/>
-                          <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                        {featuredVideo.location_text}
-                      </p>
-                    </div>
-                    {/* ... (Tombol share) ... */}
-                  </div>
+                {/* ... (Kode Video Utama Anda) ... */}
+                <span className={styles.liveBadge}>LIVE</span>
+                <HlsPlayer
+                  url={getHlsUrl(featuredVideo._id || featuredVideo.id)}
+                  playing={true}
+                  controls={true}
+                  muted={true}
+                  className={styles.videoPlaceholder}
+                />
+                <div className={styles.videoOverlay}>
+                  <h2 className={styles.videoTitle}>{featuredVideo.name}</h2>
+                  <p className={styles.videoLocation}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2"/>
+                      <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                    {featuredVideo.location_text}
+                  </p>
                 </div>
               </div>
-
-              {/* Sidebar with thumbnails (TERHUBUNG) */}
+              
+              {/* Sidebar Thumbnail (Kanan) */}
               <div className={styles.sidebar}>
-                <div className={styles.tabButtons}>
-                  {/* (Logika tab 'terdekat' belum diimplementasi, sama seperti file asli) */}
-                  <button 
-                    className={`${styles.tabButton} ${activeTab === 'terdekat' ? styles.tabActive : ''}`}
-                    onClick={() => setActiveTab('terdekat')}
-                  >
-                    Terdekat
-                  </button>
-                  <button 
-                    className={`${styles.tabButton} ${activeTab === 'purwakarta' ? styles.tabActive : ''}`}
-                    onClick={() => setActiveTab('purwakarta')}
-                  >
-                    Purwakarta
-                  </button>
-                </div>
                 
+                {/* Daftar ini sekarang akan menampilkan hasil filter */}
                 <div className={styles.thumbnailsList}>
-                  {/* Mengganti cctvLocations.map dengan cameras.map */}
-                  {cameras.map((cam) => (
-                    <div 
-                      key={cam.id} 
-                      // Ganti logika 'active'
-                      className={`${styles.thumbnailCard} ${featuredVideo.id === cam.id ? styles.active : ''}`}
-                      onClick={() => handleThumbnailClick(cam)} // Ganti handler
-                    >
-                      <div className={styles.thumbnailImageWrapper}>
-                        {<span className={styles.thumbnailLiveBadge}>LIVE</span>}
-                        
-                        {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
-                        <HlsPlayer
-                          url={getHlsUrl(cam.id)}
-                          playing={false}
-                          controls={false}
-                          muted={true}
-                          className={styles.thumbnailImage} // Pakai styling dari iframe
-                        />
+                  {/* .map() di sini menggunakan 'cameras' (state yang difilter) */}
+                  {cameras.length > 0 ? (
+                    cameras.map((cam) => (
+                      <div 
+                        key={cam._id || cam.id} 
+                        className={`${styles.thumbnailCard} ${featuredVideo._id === (cam._id || cam.id) ? styles.activeThumbnail : ''}`}
+                        onClick={() => handleThumbnailClick(cam)}
+                      >
+                        <div className={styles.thumbnailImageWrapper}>
+                          <HlsPlayer
+                            url={getHlsUrl(cam._id || cam.id)}
+                            playing={false} 
+                            controls={false}
+                            muted={true}
+                            className={styles.thumbnailImage}
+                          />
+                        </div>
+                        <div className={styles.thumbnailInfo}>
+                          <h4 className={styles.thumbnailTitle}>{cam.name}</h4>
+                          <p className={styles.thumbnailLocation}>{cam.location_text}</p>
+                        </div>
                       </div>
-                      <div className={styles.thumbnailInfo}>
-                        <p className={styles.thumbnailTitle}>{cam.name}</p>
-                        <p className={styles.thumbnailLocation}>{cam.location_text}</p>
-                      </div>
+                    ))
+                  ) : (
+                    // Tampilkan pesan yang sesuai jika tidak ada hasil
+                    <div style={{ color: 'white', opacity: 0.7, padding: '1rem', textAlign: 'center' }}>
+                      {error ? "Gagal memuat kamera." : (searchQuery ? "Kamera tidak ditemukan." : "Memuat kamera...")}
                     </div>
-                  ))}
+                  )}
                 </div>
-              </div>
-            </div>
+              </div> 
+            </div> 
           ) : (
+            // Placeholder saat loading
             <div className={styles.contentWrapper} style={{
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center', 
-              color: 'white', 
-              minHeight: '400px', 
-              backgroundColor: '#222'
+              display: 'flex', justifyContent: 'center', alignItems: 'center', 
+              color: 'white', minHeight: '500px', backgroundColor: '#222'
             }}>
               <p>{error ? "Gagal memuat video" : "Memuat data video..."}</p>
             </div>
           )}
-        </div>
+        </div> 
 
-        {/* Map Section (TERHUBUNG) */}
+        {/* --- Bagian Peta --- */}
         <div className={styles.mapSection}>
-          <div className={styles.mapHeader}>
-            <h2 className={styles.mapTitle}>Peta Lokasi CCTV Purwakarta</h2>
-            <p className={styles.mapSubtitle}>Pantau seluruh titik CCTV di Kabupaten Purwakarta</p>
-          </div>
-
-          {/* (Map Iframe masih statis, Anda perlu logika map yang dinamis nanti) */}
-          <div className={styles.mapContainer}>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126515.89634234387!2d107.38339894785156!3d-6.5568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e690f2a84f34e09%3A0x4027a76e352e460!2sPurwakarta%2C%20Kec.%20Purwakarta%2C%20Kabupaten%20Purwakarta%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1730707000000!5m2!1sid!2sid"
-              className={styles.mapIframe}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Peta Purwakarta, Jawa Barat"
-            ></iframe>
-          </div>
-
-          {/* Location Cards (TERHUBUNG) */}
-          <div className={styles.locationSection}>
-            <h3 className={styles.locationTitle}>Titik CCTV Aktif</h3>
-            <div className={styles.locationGrid}>
-              {/* Mengganti cctvLocations.map dengan cameras.map */}
-              {cameras.length > 0 ? (
-                cameras.map((cam) => (
-                  <div key={cam.id} className={styles.locationCard}>
-                    <div className={styles.locationCardHeader}>
-                      <span className={styles.locationLiveBadge}>
-                        <span className={styles.liveDot}></span>
-                        LIVE
-                      </span>
-                    </div>
-                    <h4 className={styles.locationCardTitle}>{cam.name}</h4>
-                    <p className={styles.locationCardAddress}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                      {cam.location_text}
-                    </p>
-                    <a 
-                      onClick={() => handleThumbnailClick(cam)} // Ganti href dengan onClick
-                      style={{cursor: 'pointer'}} // Tambahkan pointer
-                      className={styles.viewButton}
-                    >
-                      Lihat CCTV
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </a>
-                  </div>
-              ))
-              ) : (
-                <div style={{ color: 'white', opacity: 0.7, gridColumn: '1 / -1' }}>
-                  {error ? "Gagal memuat daftar lokasi." : "Memuat daftar lokasi..."}
-                </div>
-              )}
-              
-            </div>
+          <div className={styles.mapPlaceholder}>
+            <MapComponent 
+              // MODIFIKASI: Peta harus selalu menampilkan SEMUA kamera (dari master)
+              cameras={allCamerasMaster} 
+              activeCamera={featuredVideo}
+              onMarkerClick={handleThumbnailClick} 
+            />
           </div>
         </div>
+        
       </main>
     </div>
   );

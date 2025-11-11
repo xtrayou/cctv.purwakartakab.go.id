@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
-// Pastikan path ke HlsPlayer.jsx ini benar
-import HlsPlayer from '../components/HlsPlayer'; // <-- MENGGUNAKAN HLS.JS
-import styles from './WelcomePage.module.css'; // Tetap pakai styling Anda
+import { useNavigate } from 'react-router-dom';
+import HlsPlayer from '../components/HlsPlayer';
+import styles from './WelcomePage.module.css';
 import Navbar from '../components/navbar';
 
 // URL API backend Go Anda
 const API_URL = 'http://localhost:8000/api';
+// Tentukan berapa banyak thumbnail untuk dimuat per "halaman"
+const CAMERAS_PER_PAGE = 8;
 
 const WelcomePage = () => {
-  // --- STATE DARI HomePage.jsx ---
+  // --- States ---
   const [cameras, setCameras] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [allCamerasMaster, setAllCamerasMaster] = useState([]);
   const [featuredVideo, setFeaturedVideo] = useState(null);
   const [error, setError] = useState(null);
-  
-  // State pencarian dari WelcomePage.jsx
   const [searchQuery, setSearchQuery] = useState('');
+  const [visibleCamerasCount, setVisibleCamerasCount] = useState(CAMERAS_PER_PAGE);
 
-  // --- FUNGSI useEffect DARI HomePage.jsx ---
-  // (Untuk mengambil data dari API saat halaman dimuat)
+  const navigate = useNavigate();
+
+  // --- Data Fetching ---
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -36,13 +39,16 @@ const WelcomePage = () => {
         const activeCameras = camerasData.filter(cam => cam.enabled);
 
         setCameras(activeCameras);
+        setAllCamerasMaster(activeCameras);
         setLocations(locationsData);
 
+        // Set video pertama sebagai video utama
         if (activeCameras.length > 0) {
           setFeaturedVideo(activeCameras[0]);
         }
 
       } catch (err) {
+        // Tangkap error 'Failed to fetch' di sini
         setError(err.message);
         console.error("Fetch error:", err);
       }
@@ -51,38 +57,43 @@ const WelcomePage = () => {
     fetchInitialData();
   }, []);
 
-  // --- FUNGSI HANDLER DARI HomePage.jsx ---
-  const handleSearch = async (query) => {
+  // --- Handlers ---
+  const handleSearch = (query) => {
+    setSearchQuery(query); // Tetap update input field
+    setVisibleCamerasCount(CAMERAS_PER_PAGE); // Reset pagination
+
     if (query === "") {
-      try {
-        const res = await fetch(`${API_URL}/cameras`);
-        const data = await res.json();
-        setCameras(data.filter(cam => cam.enabled));
-      } catch (err) {
-        console.error("Reset search error:", err);
-      }
+      // Jika query kosong, kembalikan ke daftar penuh
+      setCameras(allCamerasMaster);
       return;
     }
-    try {
-      const res = await fetch(`${API_URL}/cameras/search/${query}`);
-      const data = await res.json();
-      setCameras(data);
-    } catch (err) {
-      console.error("Search error:", err);
-    }
+
+    const lowerQuery = query.toLowerCase();
+
+    // Filter berdasarkan 'name' ATAU 'location_text' (case-insensitive)
+    const filtered = allCamerasMaster.filter(cam => 
+      (cam.name && cam.name.toLowerCase().includes(lowerQuery)) ||
+      (cam.location_text && cam.location_text.toLowerCase().includes(lowerQuery))
+    );
+    
+    setCameras(filtered);
   };
 
   const handleThumbnailClick = (camera) => {
-    setFeaturedVideo(camera);
+    navigate(`/VideoPage/${camera.id}`);
   };
 
-  // Fungsi URL HLS (tanpa cache bust, karena sudah di-handle di server)
+  // Handler untuk tombol "Lihat Lebih Banyak"
+  const handleLoadMore = () => {
+    setVisibleCamerasCount((prevCount) => prevCount + CAMERAS_PER_PAGE);
+  };
+
+  // Fungsi untuk mendapatkan URL HLS dengan cache-busting
   const getHlsUrl = (id) => {
     return `http://localhost:8000/live/${id}/index.m3u8?t=${new Date().getTime()}`;
   };
 
-
-  // Render layout dari WelcomePage dengan data dinamis
+  // --- RENDER ---
   return (
     <div className={styles.container}>
       {/* (Efek latar belakang ... biarkan seperti aslinya) */}
@@ -96,9 +107,26 @@ const WelcomePage = () => {
       <Navbar 
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        onLocationSelect={(location) => handleSearch(location)}
+        onLocationSelect={handleSearch} 
         showDropdown={true}
+        suggestionData={allCamerasMaster} 
       />
+
+      {/* ===== Peringatan Error (Non-Blokir) ===== */}
+      {error && (
+        <div style={{
+          padding: '1rem',
+          backgroundColor: 'rgba(255, 100, 100, 0.2)',
+          border: '1px solid #ff6464',
+          color: 'white',
+          borderRadius: '8px',
+          margin: '1rem 60px 0 60px', // Sesuaikan margin
+          textAlign: 'center'
+        }}>
+          <strong>Koneksi Gagal:</strong> {error}. <br/>
+          Pastikan server sudah berjalan!
+        </div>
+      )}
 
       {/* ===== Konten Utama ===== */}
       <main className={styles.main}>
@@ -110,21 +138,18 @@ const WelcomePage = () => {
             </h1>
           </div>
 
-          {/* Video Utama (TERHUBUNG) */}
-          {featuredVideo ? (
-            <div className={styles.mainVideoContainer}>
+          {/* Video Utama (dengan pelindung) */}
+          <div className={styles.mainVideoContainer}>
+            {featuredVideo ? (
               <div className={styles.mainVideo}>
                 <span className={styles.liveBadge}>LIVE</span>
-                
-                {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
                 <HlsPlayer
                   url={getHlsUrl(featuredVideo.id)}
-                  playing={true}  // Autoplay
-                  controls={true} // Tampilkan controls
-                  muted={true}    // Wajib untuk autoplay
-                  className={styles.videoPlaceholder} // Pakai styling dari iframe
+                  playing={true}
+                  controls={false}
+                  muted={true}
+                  className={styles.videoPlaceholder}
                 />
-
                 <div className={styles.videoOverlay}>
                   <div className={styles.videoInfo}>
                     <h2 className={styles.videoTitle}>{featuredVideo.name}</h2>
@@ -138,68 +163,77 @@ const WelcomePage = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          ) : (
-           <div style={{
-              padding: '1rem',
-              backgroundColor: 'rgba(255, 100, 100, 0.2)',
-              border: '1px solid #ff6464',
-              color: 'white',
-              borderRadius: '8px',
-              margin: '1rem 0',
-              textAlign: 'center'
-            }}>
-              <strong>Koneksi Gagal:</strong> {error}. <br/>
-              Pastikan server sudah berjalan.
-            </div>
-          )}
-          
+            ) : (
+              // Placeholder jika loading atau error
+              <div className={styles.mainVideo} style={{ 
+                backgroundColor: '#222', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                color: 'white',
+                minHeight: '400px' // Samakan dengan min-height video
+              }}>
+                <p>{error ? "Gagal memuat video utama" : "Memuat video..."}</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* ===== Bagian Thumbnail CCTV (TERHUBUNG) ===== */}
+        {/* ===== Bagian Thumbnail CCTV (dengan pagination) ===== */}
         <div className={styles.thumbnailsSection}>
           <div className={styles.sectionHeader}>
-            <h3 className={styles.sectionTitle}>Lihat Lebih Banyak</h3>
+            <h3 className={styles.sectionTitle}>
+              {searchQuery ? `Hasil Pencarian untuk "${searchQuery}"` : "Lihat Lebih Banyak"}
+            </h3>
           </div>
 
           {cameras.length > 0 ? (
-            <div className={styles.thumbnailsGrid}>
-              {/* MENGGANTI cctvLocations.map DENGAN cameras.map */}
-              {cameras.map((cam) => (
-                <div 
-                  key={cam.id} 
-                  className={styles.thumbnailCard}
-                  onClick={() => handleThumbnailClick(cam)} // <-- TERHUBUNG
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className={styles.thumbnailImageWrapper}>
-                    <span className={styles.thumbnailLiveBadge}>LIVE</span>
-                    
-                    {/* MENGGANTI <iframe> DENGAN HlsPlayer */}
-                    <HlsPlayer
-                      url={getHlsUrl(cam.id)}
-                      playing={false} // Jangan autoplay thumbnail
-                      controls={false} // Jangan ada controls di thumbnail
-                      muted={true}
-                      className={styles.thumbnailImage} // Pakai styling dari iframe
-                    />
-
-                    {/* Kita bisa hapus tombol play statis karena HlsPlayer akan memutar video kecil */}
-                    {/* <div className={styles.thumbnailPlayButton}> ... </div> */}
-
-                    <div className={styles.thumbnailOverlay}>
-                      <p className={styles.thumbnailTitle}>{cam.name}</p>
+            <>
+              <div className={styles.thumbnailsGrid}>
+                {/* Gunakan .slice(0, visibleCamerasCount) 
+                  untuk memotong array cameras sesuai jumlah yang terlihat
+                */}
+                {cameras.slice(0, visibleCamerasCount).map((cam) => (
+                  <div 
+                    key={cam._id || cam.id} 
+                    className={styles.thumbnailCard}
+                    onClick={() => handleThumbnailClick(cam)}
+                  >
+                    <div className={styles.thumbnailImageWrapper}>
+                      <span className={styles.thumbnailLiveBadge}>LIVE</span>
+                      <HlsPlayer
+                        url={getHlsUrl(cam._id || cam.id)}
+                        playing={true} 
+                        controls={false}
+                        muted={true}
+                        className={styles.thumbnailImage}
+                      />
+                      <div className={styles.thumbnailOverlay}>
+                        <p className={styles.thumbnailTitle}>{cam.name}</p>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+
+              {/* Tombol "Lihat Lebih Banyak" */}
+              {!searchQuery && visibleCamerasCount < cameras.length && (
+                <div className={styles.loadMoreContainer}>
+                  <button 
+                    onClick={handleLoadMore} 
+                    className={styles.loadMoreButton}
+                  >
+                    Lihat Lebih Banyak
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
+            // Placeholder jika kamera kosong
             <div style={{ color: 'white', opacity: 0.7, padding: '1rem 0' }}>
               {error ? "Gagal memuat daftar kamera." : "Tidak ada kamera untuk ditampilkan."}
             </div>
           )}
-          
         </div>
       </main>
     </div>

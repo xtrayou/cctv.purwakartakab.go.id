@@ -1,3 +1,4 @@
+/* --- 1. Layout Global & Latar Belakang --- */
 .container {
   min-height: 100vh;
   background: url('../../public/assets/bg.png') no-repeat center center fixed;
@@ -7,91 +8,29 @@
   margin: 0;
   width: 100%;
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 60px;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
+.backgroundEffects {
+  position: absolute;
   top: 0;
-  z-index: 100;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.logoImage {
-  height: 30px;
-  width: auto;
-}
-
-.logoIcon {
-  font-size: 24px;
-}
-
-.logoText {
-  color: #ffffff;
-}
-
-.logoText span {
-  color: #2772F8;
-}
-
-.searchBar {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 25px;
-  padding: 8px 16px;
-  min-width: 350px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.searchInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  font-size: 14px;
-  outline: none;
-  padding: 4px 8px;
-}
-
-.searchInput::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.searchButton {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 4px;
-}
-
-.searchButton:hover {
-  color: #ffffff;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .main {
-  padding: 40px 60px;
+  padding: 80px 60px;
   max-width: 1600px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
-/* Video Section */
+/* --- 2. Layout Halaman (Video + Sidebar) --- */
 .videoSection {
   margin-bottom: 80px;
 }
@@ -99,21 +38,16 @@
 .contentWrapper {
   display: flex;
   gap: 30px;
-  margin-bottom: 40px;
+  align-items: flex-start;
 }
 
+/* --- 3. Video Utama (Kiri) --- */
 .mainSection {
-  flex: 1;
-}
-
-.mainVideo {
+  flex: 3; /* Mengambil 3 bagian dari rasio */
   position: relative;
-  width: 100%;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-  margin-bottom: 20px;
-  border: 4px solid #2772F8;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7);
 }
 
 .videoPlaceholder {
@@ -133,7 +67,7 @@
   right: 20px;
   background: #ff0000;
   color: #ffffff;
-  padding: 8px 20px;
+  padding: 6px 16px;
   border-radius: 20px;
   font-size: 14px;
   font-weight: 700;
@@ -143,99 +77,29 @@
   letter-spacing: 1px;
 }
 
-/* Video Controls */
-.videoControls {
+.videoOverlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6) 50%, transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%);
+  padding: 30px 25px 20px;
   z-index: 2;
 }
 
-.controlButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  color: white;
-  text-decoration: none;
-}
-
-.controlButton:hover {
-  background: rgba(239, 68, 68, 0.8);
-}
-
-.liveIndicator {
-  display: flex;
-  align-items: center;
-  background: rgba(239, 68, 68, 0.9);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.controlSpacer {
-  flex: 1;
-}
-
-.mainVideoInfo {
-  padding: 0 8px;
-}
-
-.videoInfoHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.shareButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.shareButton:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: #2772F8;
-}
-
 .videoTitle {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   color: #ffffff;
 }
 
 .videoLocation {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  gap: 6px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
 }
 
@@ -244,502 +108,199 @@
   flex-shrink: 0;
 }
 
+/* --- 4. Sidebar (Kanan) --- */
 .sidebar {
-  width: 320px;
-  flex-shrink: 0;
+  flex: 1; /* Mengambil 1 bagian dari rasio */
+  min-width: 280px; /* Lebar minimum agar tidak jadi garis */
+  max-width: 350px; /* Lebar maksimum */
+  background: rgba(10, 14, 39, 0.7);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: calc(100vh - 200px); /* Batasi tinggi, misal 100vh - (padding atas + bawah) */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Tab Buttons */
 .tabButtons {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-.tabButton {
+.tabButtons button {
   flex: 1;
-  padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.tabButton:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.tabActive {
-  background: #2772F8 !important;
-  border-color: #2772F8 !important;
-  color: #ffffff !important;
-}
-
-.sidebarTitle {
-  font-size: 20px;
-  font-weight: 600;
+.tabButtons button.activeTab {
+  background: #2772F8;
+  border-color: #2772F8;
   color: #ffffff;
-  margin: 0 0 20px 0;
+}
+
+.tabButtons button:hover:not(.activeTab) {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
 }
 
 .thumbnailsList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-height: 600px;
-  overflow-y: auto;
-  padding-right: 8px;
-}
-
-/* Scrollbar styling untuk sidebar */
-.thumbnailsList::-webkit-scrollbar {
-  width: 6px;
-}
-
-.thumbnailsList::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-.thumbnailsList::-webkit-scrollbar-thumb {
-  background: #2772F8;
-  border-radius: 10px;
-}
-
-.thumbnailsList::-webkit-scrollbar-thumb:hover {
-  background: #1a5dd6;
+  gap: 15px;
 }
 
 .thumbnailCard {
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid transparent;
   display: flex;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.thumbnailCard:hover,
-.thumbnailCard.active {
-  transform: translateX(-8px);
+.thumbnailCard:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.thumbnailCard.activeThumbnail {
   border-color: #2772F8;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(39, 114, 248, 0.15);
 }
 
 .thumbnailImageWrapper {
-  position: relative;
-  width: 168px;
   flex-shrink: 0;
+  width: 80px;
+  height: auto;
+  aspect-ratio: 16/9;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  background: #000;
 }
 
 .thumbnailImage {
   width: 100%;
-  height: auto;
-  display: block;
-  background: #000;
-  aspect-ratio: 16/9;
+  height: 100%;
   object-fit: cover;
-  border: none;
-  pointer-events: none;
-  min-height: 94px;
-}
-
-.thumbnailLiveBadge {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: #ff0000;
-  color: #ffffff;
-  padding: 3px 8px;
-  border-radius: 8px;
-  font-size: 9px;
-  font-weight: 700;
-  z-index: 2;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  display: block;
 }
 
 .thumbnailInfo {
-  padding: 12px 12px 12px 0;
   flex: 1;
-  min-width: 0;
+  min-width: 0; /* Mencegah teks mendorong layout */
 }
 
 .thumbnailTitle {
   font-size: 14px;
   font-weight: 600;
   color: #ffffff;
-  margin: 0 0 6px 0;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
+  margin: 0;
+  line-height: 1.3;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .thumbnailLocation {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Map Section */
-.mapSection {
-  width: 100%;
-}
-
-.mapHeader {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.mapTitle {
-  font-size: 48px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 12px 0;
-}
-
-.mapSubtitle {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
-}
-
-.mapContainer {
-  width: 100%;
-  height: 600px;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7);
-  border: 4px solid #2772F8;
-  margin-bottom: 60px;
-}
-
-.mapIframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.locationSection {
-  margin-top: 60px;
-}
-
-.locationTitle {
-  font-size: 32px;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0 0 30px 0;
-}
-
-.locationGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-
-.locationCard {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(39, 114, 248, 0.3);
-  border-radius: 16px;
-  padding: 24px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.locationCard:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: #2772F8;
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(39, 114, 248, 0.2);
-}
-
-.locationCardHeader {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
-}
-
-.locationLiveBadge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 0, 0, 0.2);
-  border: 1px solid #ff0000;
-  color: #ff0000;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.liveDot {
-  width: 8px;
-  height: 8px;
-  background: #ff0000;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.2);
-  }
-}
-
-.locationCardTitle {
-  font-size: 20px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 12px 0;
-}
-
-.locationCardAddress {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 14px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
-  margin: 0 0 20px 0;
-  line-height: 1.5;
+  margin: 4px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.locationCardAddress svg {
-  color: #2772F8;
-  flex-shrink: 0;
-  margin-top: 2px;
+
+/* --- 5. Bagian Peta --- */
+.mapSection {
+  margin-bottom: 80px;
 }
 
-.viewButton {
+.mapPlaceholder {
+  width: 100%;
+  height: 400px;
+  background-color: #333;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  width: 100%;
-  background: #2772F8;
-  color: #ffffff;
-  border: none;
-  border-radius: 10px;
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
 }
 
-.viewButton:hover {
-  background: #1a5dd6;
-  transform: translateX(4px);
-}
 
-.viewButton svg {
-  transition: transform 0.3s ease;
-}
-
-.viewButton:hover svg {
-  transform: translateX(4px);
-}
-
+/* --- 6. Media Queries --- */
 @media (max-width: 1200px) {
-  .mapTitle {
-    font-size: 36px;
-  }
-
-  .locationGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .contentWrapper {
-    flex-direction: column;
+    flex-direction: column; /* Tumpuk video dan sidebar */
+    align-items: stretch;
   }
 
   .sidebar {
-    width: 100%;
-  }
-
-  .thumbnailsList {
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    max-height: none;
-    padding-right: 0;
-    padding-bottom: 8px;
-  }
-
-  .thumbnailCard {
-    min-width: 320px;
-    flex-direction: column;
-  }
-
-  .thumbnailImageWrapper {
-    width: 100%;
-  }
-
-  .thumbnailImage {
-    min-height: 180px;
-  }
-
-  .thumbnailInfo {
-    padding: 12px;
-  }
-
-  .thumbnailCard:hover,
-  .thumbnailCard.active {
-    transform: translateY(-8px);
+    max-width: 100%; /* Sidebar jadi lebar penuh */
+    max-height: 400px; /* Batasi tinggi, tapi bisa di-scroll */
   }
 }
 
 @media (max-width: 768px) {
-  .header {
-    padding: 16px 24px;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .searchBar {
-    width: 100%;
-    min-width: auto;
-  }
-
   .main {
-    padding: 24px;
-  }
-
-  .videoSection {
-    margin-bottom: 60px;
-  }
-
-  .videoTitle {
-    font-size: 24px;
-  }
-
-  .videoLocation {
-    font-size: 14px;
-  }
-
-  .videoInfoHeader {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .shareButton {
-    align-self: flex-start;
-  }
-
-  .mainVideo {
-    border: 2px solid #2772F8;
-  }
-
-  .videoPlaceholder {
-    min-height: 300px;
-  }
-
-  .videoControls {
-    padding: 8px 12px;
-    gap: 6px;
-  }
-
-  .controlButton {
-    padding: 6px;
-  }
-
-  .liveIndicator {
-    font-size: 10px;
-    padding: 5px 10px;
-  }
-
-  .tabButtons {
-    gap: 6px;
-  }
-
-  .tabButton {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-
-  .mapTitle {
-    font-size: 28px;
-  }
-
-  .mapSubtitle {
-    font-size: 16px;
-  }
-
-  .mapContainer {
-    height: 400px;
-    border: 2px solid #2772F8;
-  }
-
-  .locationGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .locationTitle {
-    font-size: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .main {
-    padding: 16px;
+    padding: 32px 24px;
   }
 
   .videoSection {
     margin-bottom: 40px;
   }
 
-  .videoTitle {
-    font-size: 20px;
+  .mapSection {
+    margin-bottom: 40px;
+  }
+
+  .videoPlaceholder {
+    min-height: 300px;
+  }
+
+  .sidebar {
+    min-width: unset; /* Hapus min-width agar pas */
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 24px 16px;
   }
 
   .videoPlaceholder {
     min-height: 200px;
   }
 
-  .thumbnailCard {
-    min-width: 220px;
+  .videoTitle {
+    font-size: 18px;
   }
 
-  .mapTitle {
-    font-size: 24px;
+  .videoLocation {
+    font-size: 11px;
   }
 
-  .mapSubtitle {
-    font-size: 14px;
+  .thumbnailTitle {
+    font-size: 13px;
   }
 
-  .mapContainer {
-    height: 300px;
-    border-radius: 16px;
-  }
-
-  .locationGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .locationCard {
-    padding: 20px;
+  .thumbnailLocation {
+    font-size: 10px;
   }
 }

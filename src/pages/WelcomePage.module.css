@@ -221,38 +221,26 @@
   margin: 0;
 }
 
+/* --- INI ADALAH PERUBAIKAN UTAMA --- */
 .thumbnailsGrid {
-  display: flex;
+  display: grid;
+  /* Ini adalah kuncinya:
+    - Buat kolom sebanyak mungkin (auto-fill)
+    - Setiap kolom memiliki lebar minimal 280px
+    - '1fr' berarti sisa ruang akan dibagi rata
+  */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
   padding-bottom: 20px;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Scrollbar styling */
-.thumbnailsGrid::-webkit-scrollbar {
-  height: 8px;
-}
-
-.thumbnailsGrid::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-.thumbnailsGrid::-webkit-scrollbar-thumb {
-  background: #2772F8;
-  border-radius: 10px;
-}
-
-.thumbnailsGrid::-webkit-scrollbar-thumb:hover {
-  background: #1a5dd6;
+  /* Properti 'flex-direction', 'overflow', 'scroll-behavior' 
+    telah dihapus karena tidak diperlukan lagi.
+  */
 }
 
 .thumbnailCard {
-  flex: 0 0 calc(25% - 15px);
-  min-width: 280px;
+  /* Properti 'flex' dan 'min-width' dihapus.
+    Grid akan menangani ukuran secara otomatis.
+  */
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -332,6 +320,32 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Styling untuk tombol "Lihat Lebih Banyak" */
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0 1rem 0;
+}
+
+.loadMoreButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.loadMoreButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* --- Media Queries (Dirapikan) --- */
+
 @media (max-width: 1024px) {
   .topSection {
     flex-direction: column;
@@ -348,10 +362,9 @@
     max-width: 100%;
   }
 
-  .thumbnailCard {
-    flex: 0 0 calc(33.333% - 14px);
-    min-width: 250px;
-  }
+  /* .thumbnailCard tidak perlu di-styling di sini lagi.
+    Grid menanganinya.
+  */
 }
 
 @media (max-width: 768px) {
@@ -383,10 +396,9 @@
     font-size: 44px;
   }
 
-  .thumbnailCard {
-    flex: 0 0 calc(50% - 10px);
-    min-width: 220px;
-  }
+  /* .thumbnailCard tidak perlu di-styling di sini lagi.
+    Grid menanganinya.
+  */
 
   .mainVideo {
     border: 2px solid #2772F8;
@@ -418,10 +430,9 @@
     font-size: 22px;
   }
 
-  .thumbnailCard {
-    flex: 0 0 100%;
-    min-width: 200px;
-  }
+  /* .thumbnailCard tidak perlu di-styling di sini lagi.
+    Grid menanganinya.
+  */
 
   .searchBar {
     padding: 6px 12px;
@@ -433,6 +444,7 @@
   }
 }
 
+/* Efek gradien latar belakang (tidak berubah) */
 .gradientContainer {
     position: absolute;
     width: 100%;

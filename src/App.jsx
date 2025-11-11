@@ -1,4 +1,5 @@
 import './App.css';
+import 'leaflet/dist/leaflet.css';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import WelcomePage from './pages/WelcomePage';
 import VideoPage from './pages/VideoPage';
@@ -8,6 +9,11 @@ function NavigationButtons() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+
+  // Fungsi pengecekan yang lebih baik untuk highlight tombol
+  const isVideoPageActive = () => {
+    return currentPath === '/VideoPage' || currentPath.startsWith('/VideoPage/');
+  }
 
   return (
     <div style={{
@@ -35,10 +41,12 @@ function NavigationButtons() {
         Welcome Page
       </button>
       <button
-        onClick={() => navigate('/video')}
+        // MODIFIKASI: Ubah ke '/VideoPage' (V besar)
+        onClick={() => navigate('/VideoPage')}
         style={{
           padding: '12px 24px',
-          background: currentPath === '/video' ? '#2772F8' : '#444',
+          // MODIFIKASI: Gunakan fungsi pengecekan baru
+          background: isVideoPageActive() ? '#2772F8' : '#444',
           color: '#fff',
           border: 'none',
           borderRadius: '8px',
@@ -72,7 +80,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<WelcomePage />} />
-          <Route path="/video" element={<VideoPage />} />
+          <Route path="/VideoPage" element={<VideoPage />} />
+          <Route path="/VideoPage/:id" element={<VideoPage />} />
           <Route path="/siadmin" element={<Siadmin />} />
         </Routes>
         

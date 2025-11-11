@@ -1,18 +1,27 @@
+/* --- 1. Main Navbar Layout --- */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Padding responsif: (min, ideal, max) (atas/bawah, kiri/kanan) */
   padding: clamp(16px, 2vw, 24px) clamp(20px, 3vw, 60px);
+  gap: clamp(16px, 3vw, 32px);
+  
+  /* Efek Latar Belakang */
   background: rgba(18, 18, 18, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  
+  /* Posisi */
   position: sticky;
   top: 0;
   z-index: 100;
-  width: 100vw;
+  
+  /* Ukuran */
+  width: 100%; /* Lebih aman dari 100vw */
   box-sizing: border-box;
-  gap: clamp(16px, 3vw, 32px);
   min-height: 70px;
+  
   transition: all 0.3s ease;
 }
 
@@ -23,173 +32,180 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* --- 2. Logo --- */
 .logo {
   display: flex;
   align-items: center;
   gap: clamp(8px, 1vw, 12px);
-  font-size: clamp(16px, 1.5vw, 20px);
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.logoImage {
-  height: clamp(28px, 2.5vw, 36px);
-  width: auto;
-  max-width: none;
-}
-
-.logoIcon {
-  font-size: clamp(18px, 2vw, 24px);
-}
-
-.logoText {
+  text-decoration: none;
   color: #ffffff;
 }
 
+.logoImage {
+  height: 35px; /* Sedikit disesuaikan */
+  width: auto;
+}
+
+.logoText {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
+  line-height: 1;
+}
+
 .logoText span {
-  color: #2772F8;
+  color: #2772F8; /* Warna biru Anda */
 }
 
-/* --- Search Bar --- */
-.searchBar {
-  position: relative;
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  min-width: clamp(200px, 25vw, 300px);
-  max-width: 500px;
-}
-
+/* --- 3. Search Bar & Container --- */
 .searchContainer {
+  position: relative;
+  flex: 1; /* Mengisi ruang tersisa */
+  max-width: 600px; /* Batas lebar maksimum */
+  display: flex;
+  justify-content: center;
+}
+
+.searchBar {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 28px;
-  padding: clamp(8px, 1vw, 12px) clamp(12px, 1.5vw, 18px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: all 0.3s ease;
   width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50px; /* Membuatnya bulat penuh */
+  padding: 8px 12px 8px 20px;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.searchContainer:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(39, 114, 248, 0.3);
-}
-
-.searchContainer:focus-within {
-  background: rgba(255, 255, 255, 0.15);
+.searchBar:focus-within {
+  background: rgba(255, 255, 255, 0.1);
   border-color: #2772F8;
-  box-shadow: 0 0 0 3px rgba(39, 114, 248, 0.1);
+  box-shadow: 0 0 15px rgba(39, 114, 248, 0.3);
 }
 
 .searchInput {
   flex: 1;
   background: transparent;
   border: none;
-  color: #ffffff;
-  font-size: clamp(14px, 1vw, 16px);
   outline: none;
-  padding: clamp(6px, 0.8vw, 8px) clamp(8px, 1vw, 12px);
-  font-weight: 400;
-  min-width: 0;
+  color: #ffffff;
+  font-size: 15px;
+  padding-right: 10px; /* Jarak dari tombol */
 }
 
 .searchInput::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .searchButton {
-  background: transparent;
+  background: #2772F8;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
+  border-radius: 50%;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
-  padding: clamp(4px, 0.6vw, 6px);
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .searchButton:hover {
-  color: #2772F8;
-  background: rgba(39, 114, 248, 0.1);
+  background: #1a5dd1;
 }
 
-/* --- Dropdown --- */
-.searchDropdown {
+/* --- 4. Search Dropdown (Saran Pencarian) --- */
+.dropdownMenu {
   position: absolute;
-  top: 100%;
+  top: 115%; /* Sedikit di bawah search bar */
   left: 0;
-  right: 0;
-  background: rgba(18, 18, 18, 0.98);
-  backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  margin-top: 12px;
-  max-height: 320px;
+  width: 100%;
+  max-height: 350px;
   overflow-y: auto;
-  z-index: 1000;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  
+  background: rgba(25, 25, 25, 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 99;
 }
 
 .dropdownItem {
   display: flex;
   align-items: center;
-  padding: clamp(10px, 1vw, 14px) clamp(12px, 1.5vw, 18px);
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
   cursor: pointer;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.2s ease;
-  gap: clamp(8px, 1vw, 12px);
-}
-
-.dropdownItem:last-child {
-  border-bottom: none;
+  transition: background-color 0.2s ease;
 }
 
 .dropdownItem:hover {
-  background: rgba(39, 114, 248, 0.12);
-  padding-left: clamp(14px, 2vw, 22px);
+  background-color: rgba(39, 114, 248, 0.2);
 }
 
 .locationIcon {
-  color: #2772F8;
   flex-shrink: 0;
+  color: rgba(39, 114, 248, 0.9);
 }
 
+/* (BARU) Wrapper untuk 2 baris teks */
+.locationInfo {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Penting untuk text-overflow */
+}
+
+/* (MODIFIKASI) Teks baris pertama (Nama CCTV) */
 .locationText {
+  font-size: 14px;
+  font-weight: 600;
   color: #ffffff;
-  font-size: clamp(13px, 1vw, 14px);
-  flex: 1;
-  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* (BARU) Teks baris kedua (Lokasi Teks) */
+.locationSubtext {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px; /* Jarak kecil antar baris */
 }
 
 .noResults {
   color: rgba(255, 255, 255, 0.6);
   font-style: italic;
-  font-size: clamp(13px, 1vw, 14px);
+  text-align: center;
 }
 
-/* Scrollbar untuk dropdown */
-.searchDropdown::-webkit-scrollbar {
+/* --- 5. Scrollbar Styling (untuk Dropdown) --- */
+.dropdownMenu::-webkit-scrollbar {
   width: 6px;
 }
 
-.searchDropdown::-webkit-scrollbar-track {
+.dropdownMenu::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
 }
 
-.searchDropdown::-webkit-scrollbar-thumb {
+.dropdownMenu::-webkit-scrollbar-thumb {
   background: rgba(39, 114, 248, 0.5);
   border-radius: 3px;
 }
 
-.searchDropdown::-webkit-scrollbar-thumb:hover {
+.dropdownMenu::-webkit-scrollbar-thumb:hover {
   background: rgba(39, 114, 248, 0.7);
 }
 
-/* --- Responsive Layout --- */
+
+/* --- 6. Responsive Layout (Media Queries) --- */
 @media (min-width: 1441px) {
   .navbar {
     padding: 24px 80px;
@@ -200,72 +216,41 @@
     height: 40px;
   }
   
-  .searchBar {
+  .searchContainer {
     max-width: 600px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .navbar {
-    padding: clamp(16px, 2vw, 20px) clamp(24px, 4vw, 40px);
-    gap: clamp(20px, 3vw, 30px);
   }
 }
 
 @media (max-width: 900px) {
   .navbar {
-    flex-direction: column;
+    flex-direction: column; /* Tumpuk logo dan search bar */
     align-items: center;
     gap: clamp(16px, 2vw, 20px);
-    padding: clamp(16px, 2.5vw, 20px);
+    padding: clamp(16px, 3vw, 20px);
   }
-
-  .searchBar {
-    justify-content: center;
+  
+  .searchContainer {
     width: 100%;
-    min-width: auto;
-    max-width: min(90vw, 450px);
-  }
-
-  .logo {
-    justify-content: center;
+    max-width: none; /* Izinkan lebar penuh */
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .navbar {
-    padding: clamp(12px, 3vw, 16px);
-    gap: 14px;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .logo {
+    justify-content: center; /* Pusatkan logo */
+    width: 100%;
+  }
+
+  .searchContainer {
+    width: 100%;
   }
 
   .searchBar {
-    max-width: 100%;
-  }
-
-  .searchContainer {
-    padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2vw, 16px);
-  }
-
-  .searchInput {
-    font-size: clamp(14px, 1vw, 15px);
-  }
-
-  .logoImage {
-    height: clamp(24px, 4vw, 32px);
-  }
-}
-
-@media (max-width: 400px) {
-  .navbar {
-    padding: 12px 16px;
-    gap: 12px;
-  }
-  
-  .searchContainer {
-    padding: 8px 12px;
-  }
-  
-  .logoImage {
-    height: 26px;
+    padding: 6px 10px 6px 16px;
   }
 }
