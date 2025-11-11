@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 // Komponen
 import HlsPlayer from '../components/HlsPlayer';
-import Navbar from '../components/navbar';
+import Navbar from '../components/Navbar';
 import MapComponent from '../components/Map'; 
 
 // Styles

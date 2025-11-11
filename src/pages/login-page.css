@@ -1,0 +1,248 @@
+.login-page {
+    background-color: #121212;
+    min-height: 1024px;
+    min-width: 1440px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.login-page .group {
+    height: 925px;
+    left: -100px;
+    position: absolute;
+    top: 50px;
+    width: 1614px;
+}
+
+.login-page .ellipse {
+    aspect-ratio: 1;
+    background-color: #000cff80;
+    border-radius: 178px;
+    filter: blur(200px);
+    height: 356px;
+    left: 0;
+    position: absolute;
+    top: 391px;
+    width: 356px;
+}
+
+.login-page .div {
+    aspect-ratio: 1;
+    background-color: #000cff80;
+    border-radius: 178px;
+    filter: blur(200px);
+    height: 356px;
+    left: 1258px;
+    position: absolute;
+    top: 0;
+    width: 356px;
+}
+
+.login-page .ellipse-2 {
+    aspect-ratio: 1;
+    background-color: #ff610080;
+    border-radius: 178px;
+    filter: blur(150px);
+    height: 356px;
+    left: 100px;
+    position: absolute;
+    top: 569px;
+    width: 356px;
+}
+
+.login-page .group-wrapper {
+    display: flex;
+    height: 290px;
+    left: 102px;
+    position: absolute;
+    top: 322px;
+    width: 508px;
+}
+
+.login-page .group-2 {
+    display: flex;
+    flex-direction: column;
+    height: 290px;
+    width: 512px;
+}
+
+.login-page .judul {
+    height: 78.84px;
+    margin-left: 1.8px;
+    margin-top: 15.2px;
+    width: 514.41px;
+}
+
+.login-page .logo {
+    height: 73px;
+    margin-left: 26px;
+    margin-top: 13px;
+    width: 400px;
+}
+
+.login-page .text-wrapper {
+    -webkit-text-stroke: 1px #000000;
+    color: #ffffff;
+    font-family: "Inter-Light", Helvetica;
+    font-size: 13px;
+    font-weight: 300;
+    height: 98px;
+    letter-spacing: 0;
+    line-height: 20px;
+    margin-left: 25px;
+    margin-top: 11px;
+    width: 356px;
+}
+
+.login-page .frame {
+    background-color: #ff610080;
+    border-radius: 50px;
+    display: flex;
+    height: 66px;
+    left: 836px;
+    overflow: hidden;
+    position: absolute;
+    top: 704px;
+    width: 500px;
+}
+
+.login-page .text-wrapper-2 {
+    color: #ffffff;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 36px;
+    font-weight: 500;
+    height: 51px;
+    letter-spacing: 0;
+    line-height: 100px;
+    margin-left: 138px;
+    margin-top: -26px;
+    text-align: center;
+    white-space: nowrap;
+    width: 224px;
+}
+
+.login-page .si-user-alt-line-wrapper {
+    border: 1px solid;
+    border-color: #ffffff;
+    border-radius: 50px;
+    display: flex;
+    height: 61px;
+    left: 836px;
+    overflow: hidden;
+    position: absolute;
+    top: 496px;
+    width: 500px;
+}
+
+.login-page .si-user-alt-line {
+    aspect-ratio: 1;
+    height: 24px;
+    margin-left: 37px;
+    margin-top: 19px;
+    width: 24px;
+}
+
+.login-page .group-3 {
+    height: 79.17%;
+    left: 12.5%;
+    position: relative;
+    top: 8.33%;
+    width: 75%;
+}
+
+.login-page .vector {
+    height: 42.11%;
+    left: -4.17%;
+    position: absolute;
+    top: 53.95%;
+    width: 100%;
+}
+
+.login-page .img {
+    height: 42.11%;
+    left: 23.61%;
+    position: absolute;
+    top: -3.95%;
+    width: 44.44%;
+}
+
+.login-page .solar-lock-linear-wrapper {
+    border: 1px solid;
+    border-color: #ffffff;
+    border-radius: 50px;
+    display: flex;
+    height: 62px;
+    left: 836px;
+    overflow: hidden;
+    position: absolute;
+    top: 593px;
+    width: 500px;
+}
+
+.login-page .solar-lock-linear {
+    aspect-ratio: 1;
+    height: 24px;
+    margin-left: 40px;
+    margin-top: 19px;
+    width: 24px;
+}
+
+.login-page .group-4 {
+    height: 83.33%;
+    left: 8.33%;
+    position: relative;
+    top: 8.33%;
+    width: 83.33%;
+}
+
+.login-page .vector-2 {
+    height: 60%;
+    left: -3.75%;
+    position: absolute;
+    top: 36.25%;
+    width: 100%;
+}
+
+.login-page .vector-3 {
+    height: 40%;
+    left: 16.25%;
+    position: absolute;
+    top: -3.75%;
+    width: 60%;
+}
+
+.login-page .mingcute-user-fill {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    height: 202px;
+    left: 985px;
+    overflow: hidden;
+    position: absolute;
+    top: 218px;
+    width: 202px;
+}
+
+.login-page .group-5 {
+    height: 90.89%;
+    left: 8.33%;
+    position: relative;
+    top: 8.33%;
+    width: 83.33%;
+}
+
+.login-page .vector-4 {
+    height: 3.07%;
+    left: -2381.11%;
+    position: absolute;
+    top: -863.3%;
+    width: 4.18%;
+}
+
+.login-page .vector-5 {
+    height: 91.68%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
