@@ -1,4 +1,3 @@
-
 const SplashScreen = () => {
   return (
     <>
@@ -9,27 +8,29 @@ const SplashScreen = () => {
           <div className="ellipse-2" />
         </div>
 
-        <img
-                  src="/assets/logo.png"
-                  alt="Logo aplikasi Papais CCTV"
-                />
-
-        <div className="judul-wrapper">
+        <div className="content-center">
           <div className="judul">Selamat Datang di</div>
+          <img
+            src="/assets/logo.png"
+            alt="Logo aplikasi Papais CCTV"
+            className="logo" 
+            
+          />
         </div>
-
-
       </div>
 
       {/* CSS Langsung di File React */}
       <style>{`
         .login-page {
           background-color: #121212;
-          min-height: 1024px;
-          min-width: 1440px;
+          min-height: 100vh;
+          min-width: 100vw;
           overflow: hidden;
           position: relative;
           width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .login-page .group {
@@ -76,33 +77,53 @@ const SplashScreen = () => {
           width: 356px;
         }
 
-        .login-page .logo {
-          height: 78px;
-          left: 409px;
-          object-fit: cover;
-          position: absolute;
-          top: 454px;
-          width: 621px;
-        }
-
-        .login-page .judul-wrapper {
+        .content-center {
           display: flex;
-          height: 98px;
-          left: 466px;
-          position: absolute;
-          top: 356px;
-          width: 510px;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+          position: relative;
         }
 
         .login-page .judul {
           color: #ffffff;
           font-family: "Inter-Regular", Helvetica, Arial, sans-serif;
-          font-size: 50px;
+          font-size: 36px;
           font-weight: 400;
-          height: 98px;
           letter-spacing: 0;
-          line-height: 100px;
+          line-height: 1.2;
           white-space: nowrap;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+
+        .login-page .logo {
+          height: auto;
+          width: 600px;
+          max-width: 80vw;
+          object-fit: contain;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .login-page .judul {
+            font-size: 28px;
+          }
+
+          .login-page .logo {
+            width: 250px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .login-page .judul {
+            font-size: 24px;
+          }
+
+          .login-page .logo {
+            width: 200px;
+          }
         }
       `}</style>
     </>

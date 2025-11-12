@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Camera, MapPin, Plus, Edit2, Trash2, Save, X, Eye, Video } from 'lucide-react';
-import './Siadmin.css';
+import { useNavigate } from 'react-router-dom';
+import { Camera, MapPin, Plus, Edit2, Trash2, Save, X, Eye, Video, LogOut } from 'lucide-react';
 import { Bg } from './bg';
-
+import './Siadmin.css';
 
 const PapaisCCTVDashboard = () => {
+  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -115,8 +116,19 @@ const PapaisCCTVDashboard = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleLogout = () => {
+    // Clear login data
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userInfo");
+    
+    // Redirect to login
+    navigate("/login");
+  };
+
   return (
     <div className="dashboard-container">
+      <Bg />
+      
       {/* Mobile Menu Toggle */}
     
       <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
@@ -143,43 +155,53 @@ const PapaisCCTVDashboard = () => {
       {/* Sidebar */}
       <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
         <div className="logo">
-          <Camera size={32} color="#fff" />
+          <img 
+            src="/assets/logo.png" 
+            alt="Logo" 
+            style={{
+              width: '40px',
+              height: '40px',
+              objectFit: 'contain',
+              marginRight: '8px'
+            }}
+          />
           <div>
-            <div className="logo-title">Dashboard</div>
-            <div className="logo-subtitle">papais cctv</div>
+            <div className="logo-title">Si Admin</div>
+            <div className="logo-subtitle">Papais cctv</div>
           </div>
         </div>
 
         <div className="menu">
           <div 
             className={`menu-item ${activeMenu === 'dashboard' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveMenu('dashboard');
-              closeMobileMenu();
-            }}
+            onClick={() => setActiveMenu('dashboard')}
           >
             <MapPin size={20} />
             <span>Dashboard</span>
           </div>
           <div 
             className={`menu-item ${activeMenu === 'camera' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveMenu('camera');
-              closeMobileMenu();
-            }}
+            onClick={() => setActiveMenu('camera')}
           >
             <Camera size={20} />
             <span>Camera</span>
           </div>
           <div 
             className={`menu-item ${activeMenu === 'location' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveMenu('location');
-              closeMobileMenu();
-            }}
+            onClick={() => setActiveMenu('location')}
           >
             <MapPin size={20} />
             <span>Location</span>
+          </div>
+          
+          {/* Logout Button */}
+          <div 
+            className="menu-item logout-item"
+            onClick={handleLogout}
+            style={{ marginTop: 'auto', borderTop: '1px solid rgba(255,255,255,0.1)' }}
+          >
+            <LogOut size={20} />
+            <span>Logout</span>
           </div>
         </div>
       </div>

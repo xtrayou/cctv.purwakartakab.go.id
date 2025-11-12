@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import HlsPlayer from '../components/HlsPlayer';
 import styles from './WelcomePage.module.css';
 import Navbar from '../components/Navbar';
+import Footer from '../components/footer';
 
 const API_URL = 'http://localhost:8000/api';
 const CAMERAS_PER_PAGE = 8;
@@ -259,6 +260,7 @@ const WelcomePage = () => {
           
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

@@ -5,9 +5,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import HlsPlayer from '../components/HlsPlayer';
 import Navbar from '../components/Navbar';
 import MapComponent from '../components/Map'; 
-
+import Footer from '../components/footer';
 // Styles
 import styles from './VideoPage.module.css';
+
 
 // URL API backend Go Anda
 const API_URL = 'http://localhost:8000/api';
@@ -243,6 +244,7 @@ const VideoPage = () => {
         </div>
         
       </main>
+      <Footer />
     </div>
   );
 };

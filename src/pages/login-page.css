@@ -1,248 +1,225 @@
+/* --- 1. Global & Setup --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+}
+
+/* --- 2. Kontainer Halaman Utama --- */
 .login-page {
-    background-color: #121212;
-    min-height: 1024px;
-    min-width: 1440px;
-    overflow: hidden;
-    position: relative;
+    display: flex;
+    /* Menggunakan flex untuk menengahkan konten */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* Setidaknya setinggi layar */
     width: 100%;
+    background-color: #121212;
+    color: #ffffff;
+    padding: 2rem;
+    /* Beri jarak di layar kecil */
+    position: relative;
+    /* Diperlukan untuk background-blobs */
+    overflow: hidden;
+    /* Mencegah blobs keluar layar */
 }
 
-.login-page .group {
-    height: 925px;
-    left: -100px;
-    position: absolute;
-    top: 50px;
-    width: 1614px;
-}
-
-.login-page .ellipse {
-    aspect-ratio: 1;
-    background-color: #000cff80;
-    border-radius: 178px;
-    filter: blur(200px);
-    height: 356px;
-    left: 0;
-    position: absolute;
-    top: 391px;
-    width: 356px;
-}
-
-.login-page .div {
-    aspect-ratio: 1;
-    background-color: #000cff80;
-    border-radius: 178px;
-    filter: blur(200px);
-    height: 356px;
-    left: 1258px;
+/* --- 3. Latar Belakang Dekoratif (Blobs) --- */
+.background-blobs {
     position: absolute;
     top: 0;
-    width: 356px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    /* Di belakang konten */
 }
 
-.login-page .ellipse-2 {
+.blob {
+    position: absolute;
     aspect-ratio: 1;
-    background-color: #ff610080;
-    border-radius: 178px;
+    border-radius: 50%;
+    opacity: 0.5;
+    /* Disesuaikan dari '80' di kode Anda */
+}
+
+.blob-blue-1 {
+    background-color: #000cff;
+    filter: blur(200px);
+    width: 350px;
+    top: 60%;
+    left: 5%;
+}
+
+.blob-blue-2 {
+    background-color: #000cff;
+    filter: blur(200px);
+    width: 350px;
+    top: 10%;
+    right: 5%;
+}
+
+.blob-orange {
+    background-color: #ff6100;
     filter: blur(150px);
-    height: 356px;
-    left: 100px;
-    position: absolute;
-    top: 569px;
-    width: 356px;
+    width: 350px;
+    top: 70%;
+    left: 15%;
 }
 
-.login-page .group-wrapper {
-    display: flex;
-    height: 290px;
-    left: 102px;
-    position: absolute;
-    top: 322px;
-    width: 508px;
+/* --- 4. Card Login Utama (Grid) --- */
+.login-card {
+    display: grid;
+    /* Membuat 2 kolom, kolom kedua sedikit lebih kecil */
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    /* Jarak antar kolom */
+    width: 100%;
+    max-width: 1200px;
+    /* Batas lebar maksimum */
+    z-index: 1;
+    /* Di atas blobs */
+
+    /* Efek glassmorphism agar terlihat 'mengambang' */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem;
 }
 
-.login-page .group-2 {
+/* --- 5. Kolom Kiri: Branding --- */
+.branding-section {
     display: flex;
     flex-direction: column;
-    height: 290px;
-    width: 512px;
+    justify-content: center;
+    /* Pusatkan konten secara vertikal */
+    gap: 1.5rem;
+    /* Jarak antar elemen */
 }
 
-.login-page .judul {
-    height: 78.84px;
-    margin-left: 1.8px;
-    margin-top: 15.2px;
-    width: 514.41px;
+.branding-title-img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    /* Jaga rasio aspek */
 }
 
-.login-page .logo {
-    height: 73px;
-    margin-left: 26px;
-    margin-top: 13px;
-    width: 400px;
+.branding-logo-img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
 }
 
-.login-page .text-wrapper {
-    -webkit-text-stroke: 1px #000000;
-    color: #ffffff;
+.branding-description {
     font-family: "Inter-Light", Helvetica;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 300;
-    height: 98px;
-    letter-spacing: 0;
-    line-height: 20px;
-    margin-left: 25px;
-    margin-top: 11px;
-    width: 356px;
+    line-height: 1.6;
+    color: #d1d1d1;
+    max-width: 500px;
+    /* Batasi lebar teks */
+    /* -webkit-text-stroke: 1px #000000; <- Ini mungkin tidak Anda inginkan */
 }
 
-.login-page .frame {
-    background-color: #ff610080;
-    border-radius: 50px;
+/* --- 6. Kolom Kanan: Form Login --- */
+.login-form-section {
     display: flex;
-    height: 66px;
-    left: 836px;
-    overflow: hidden;
-    position: absolute;
-    top: 704px;
-    width: 500px;
+    flex-direction: column;
+    align-items: center;
+    /* Pusatkan semua item form */
+    justify-content: center;
+    gap: 2rem;
 }
 
-.login-page .text-wrapper-2 {
+.login-avatar {
+    width: 150px;
+    height: 150px;
+    color: rgba(255, 255, 255, 0.6);
+    stroke-width: 1;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    /* Batasi lebar form */
+    gap: 1.5rem;
+    /* Jarak antar input */
+}
+
+.input-group {
+    position: relative;
+    /* Untuk ikon di dalamnya */
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 20px;
+    color: #ffffff;
+    width: 20px;
+    height: 20px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3.5rem;
+    /* Padding kiri untuk ikon */
+    background: transparent;
+    border: 1px solid #ffffff;
+    border-radius: 50px;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.input-field::placeholder {
+    color: #a0a0a0;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #ff6100;
+    box-shadow: 0 0 10px rgba(255, 97, 0, 0.5);
+}
+
+.login-button {
+    padding: 1rem;
+    background-color: #ff610080;
+    /* Warna oranye transparan */
+    border: none;
+    border-radius: 50px;
     color: #ffffff;
     font-family: "Inter-Medium", Helvetica;
-    font-size: 36px;
+    font-size: 1.25rem;
     font-weight: 500;
-    height: 51px;
-    letter-spacing: 0;
-    line-height: 100px;
-    margin-left: 138px;
-    margin-top: -26px;
-    text-align: center;
-    white-space: nowrap;
-    width: 224px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.login-page .si-user-alt-line-wrapper {
-    border: 1px solid;
-    border-color: #ffffff;
-    border-radius: 50px;
-    display: flex;
-    height: 61px;
-    left: 836px;
-    overflow: hidden;
-    position: absolute;
-    top: 496px;
-    width: 500px;
+.login-button:hover {
+    background-color: rgba(255, 97, 0, 0.8);
+    /* Lebih pekat saat di-hover */
 }
 
-.login-page .si-user-alt-line {
-    aspect-ratio: 1;
-    height: 24px;
-    margin-left: 37px;
-    margin-top: 19px;
-    width: 24px;
-}
+/* --- 7. Responsif --- */
+@media (max-width: 1024px) {
+    .login-card {
+        /* Ubah jadi 1 kolom di layar tablet/HP */
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
 
-.login-page .group-3 {
-    height: 79.17%;
-    left: 12.5%;
-    position: relative;
-    top: 8.33%;
-    width: 75%;
-}
-
-.login-page .vector {
-    height: 42.11%;
-    left: -4.17%;
-    position: absolute;
-    top: 53.95%;
-    width: 100%;
-}
-
-.login-page .img {
-    height: 42.11%;
-    left: 23.61%;
-    position: absolute;
-    top: -3.95%;
-    width: 44.44%;
-}
-
-.login-page .solar-lock-linear-wrapper {
-    border: 1px solid;
-    border-color: #ffffff;
-    border-radius: 50px;
-    display: flex;
-    height: 62px;
-    left: 836px;
-    overflow: hidden;
-    position: absolute;
-    top: 593px;
-    width: 500px;
-}
-
-.login-page .solar-lock-linear {
-    aspect-ratio: 1;
-    height: 24px;
-    margin-left: 40px;
-    margin-top: 19px;
-    width: 24px;
-}
-
-.login-page .group-4 {
-    height: 83.33%;
-    left: 8.33%;
-    position: relative;
-    top: 8.33%;
-    width: 83.33%;
-}
-
-.login-page .vector-2 {
-    height: 60%;
-    left: -3.75%;
-    position: absolute;
-    top: 36.25%;
-    width: 100%;
-}
-
-.login-page .vector-3 {
-    height: 40%;
-    left: 16.25%;
-    position: absolute;
-    top: -3.75%;
-    width: 60%;
-}
-
-.login-page .mingcute-user-fill {
-    aspect-ratio: 1;
-    border-radius: 10px;
-    height: 202px;
-    left: 985px;
-    overflow: hidden;
-    position: absolute;
-    top: 218px;
-    width: 202px;
-}
-
-.login-page .group-5 {
-    height: 90.89%;
-    left: 8.33%;
-    position: relative;
-    top: 8.33%;
-    width: 83.33%;
-}
-
-.login-page .vector-4 {
-    height: 3.07%;
-    left: -2381.11%;
-    position: absolute;
-    top: -863.3%;
-    width: 4.18%;
-}
-
-.login-page .vector-5 {
-    height: 91.68%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
+    .branding-section {
+        align-items: center;
+        /* Pusatkan branding di layar kecil */
+        text-align: center;
+    }
 }
