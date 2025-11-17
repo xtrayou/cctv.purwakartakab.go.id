@@ -7,7 +7,17 @@ const LocationModal = ({ show, onClose, form, setForm, isEditing, onSave }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+
+    if (name === 'name') {
+      const newSlug = value.toLowerCase().replace(/ /g, '');
+      
+      setForm(prev => ({ 
+        ...prev, 
+        name: value,     
+        slug: newSlug,   
+        type: "Kecamatan" 
+      }));
+    } 
   };
 
   return (
@@ -18,23 +28,39 @@ const LocationModal = ({ show, onClose, form, setForm, isEditing, onSave }) => {
           <button className={styles.closeBtn} onClick={onClose}><X size={24} /></button>
         </div>
         <div className={styles.modalBody}>
+          
           <div className={styles.formGroup}>
             <label>Nama Lokasi</label>
-            <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Contoh: Perempatan Pemda"/>
+            <input 
+              type="text" 
+              name="name" 
+              value={form.name || ''} 
+              onChange={handleChange} 
+              placeholder="Contoh: Purwakarta"
+            />
           </div>
+          
           <div className={styles.formGroup}>
-            <label>Alamat Lengkap</label>
-            <input type="text" name="address" value={form.address} onChange={handleChange} placeholder="Masukkan alamat lengkap"/>
+            <label>Slug</label><span>Slug adalah bagian dari URL</span>
+            <input 
+              type="text" 
+              name="slug" 
+              value={form.slug || ''} 
+              readOnly 
+              placeholder="Contoh: purwakarta"
+              style={{ backgroundColor: '#1e293b' }}
+            />
           </div>
-          <div className={styles.formRow}>
-            <div className={styles.formGroup}>
-              <label>Latitude</label>
-              <input type="text" name="latitude" value={form.latitude} onChange={handleChange} placeholder="-6.560702"/>
-            </div>
-            <div className={styles.formGroup}>
-              <label>Longitude</label>
-              <input type="text" name="longitude" value={form.longitude} onChange={handleChange} placeholder="107.437491"/>
-            </div>
+          
+          <div className={styles.formGroup}>
+            <label>Tipe Lokasi</label>
+            <input 
+              type="text" 
+              name="type" 
+              value="Kecamatan" // Nilai di-hardcode
+              readOnly 
+              style={{ backgroundColor: '#1e293b' }}
+            />
           </div>
         </div>
         <div className={styles.modalFooter}>
