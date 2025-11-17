@@ -3,10 +3,6 @@ import { Plus, Edit2, Trash2, Search, Eye } from 'lucide-react';
 import styles from '../css/TableContent.module.css';
 
 const CameraTableContent = ({ cameras, locations, searchQuery, onSearchChange, onAddNew, onEdit, onDelete }) => {
-  const getLocationName = (location_id) => {
-    const location = locations.find(loc => loc._id === location_id);
-    return location ? location.name : 'N/A';
-  };
 
   return (
     <>
@@ -38,16 +34,20 @@ const CameraTableContent = ({ cameras, locations, searchQuery, onSearchChange, o
             </tr>
           </thead>
           <tbody>
-            {cameras.map((cam) => (
-              <tr key={cam._id}>
+            {Array.isArray(cameras) && cameras.map((cam) => (
+              <tr key={cam.id}>
                 <td>{cam.name}</td>
-                <td>{getLocationName(cam.location_id)}</td>
+                
+                <td>{cam.location_text}</td>
+                
                 <td>
                   <span className={`${styles.status} ${cam.enabled ? styles.active : styles.inactive}`}>
                     {cam.enabled ? 'Aktif' : 'Tidak Aktif'}
                   </span>
                 </td>
-                <td>{cam.source.ip}</td>
+                
+                <td>{cam.source ? cam.source.ip : 'N/A'}</td>
+                
                 <td className={styles.actions}>
                   <button className={`${styles.actionBtn} ${styles.view}`} title="Lihat">
                     <Eye size={16} />

@@ -161,6 +161,36 @@
   background-color: #1a5dd1;
 }
 
+.passwordInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordInputWrapper input {
+  width: 100%;
+  padding-right: 40px !important; 
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  right: 1px; 
+  top: 1px;
+  bottom: 1px;
+  width: 38px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordToggleBtn:hover {
+  color: #fff;
+}
+
 @media (max-width: 600px) {
   .formRow {
     flex-direction: column;
