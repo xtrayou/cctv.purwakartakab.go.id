@@ -67,6 +67,11 @@
   color: #cbd5e1;
 }
 
+.formGroup span {
+  font-size: 12px;
+  color: lightgray;
+}
+
 .formGroup input[type="text"],
 .formGroup input[type="number"],
 .formGroup input[type="password"],

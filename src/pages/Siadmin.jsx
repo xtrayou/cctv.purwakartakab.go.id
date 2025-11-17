@@ -46,7 +46,7 @@ const PapaisCCTVDashboard = () => {
     ip: '', port: 554, path: '', username: 'admin', password: ''
   });
   const [locationForm, setLocationForm] = useState({
-    name: '', address: '', latitude: '', longitude: ''
+    name: '', slug: '', type: 'Kecamatan'
   });
 
   // --- LOGIKA & HANDLER (Tidak Berubah) ---
@@ -125,7 +125,7 @@ const PapaisCCTVDashboard = () => {
       name: cameraForm.name,
       location_id: cameraForm.location_id,
       enabled: cameraForm.enabled,
-      location_text: locations.find(l => l._id === cameraForm.location_id)?.address || '',
+      location_text: locations.find(l => l._id === cameraForm.location_id)?.slug || '',
       latitude: locations.find(l => l._id === cameraForm.location_id)?.latitude || 0,
       longitude: locations.find(l => l._id === cameraForm.location_id)?.longitude || 0,
       source: {
@@ -176,7 +176,7 @@ const PapaisCCTVDashboard = () => {
   // --- Handler Lokasi ---
   const handleAddNewLocation = () => {
     setEditingLocation(null);
-    setLocationForm({ name: '', address: '', latitude: '', longitude: '' });
+    setLocationForm({ name: '', slug: '', type: 'Kecamatan' });
     setShowLocationModal(true);
   };
 
@@ -184,9 +184,8 @@ const PapaisCCTVDashboard = () => {
     setEditingLocation(location);
     setLocationForm({
       name: location.name,
-      address: location.address,
-      latitude: location.latitude,
-      longitude: location.longitude
+      slug: location.slug,
+      type: location.type
     });
     setShowLocationModal(true);
   };
@@ -194,13 +193,12 @@ const PapaisCCTVDashboard = () => {
   const handleSaveLocation = async () => {
     const payload = {
       name: locationForm.name,
-      address: locationForm.address,
-      latitude: Number(locationForm.latitude),
-      longitude: Number(locationForm.longitude)
+      slug: locationForm.slug,
+      type: locationForm.type
     };
 
     const url = editingLocation
-      ? `${API_URL_ADMIN}/locations/${editingLocation._id}`
+      ? `${API_URL_ADMIN}/locations/${editingLocation.id}`
       : `${API_URL_ADMIN}/locations`;
     const method = editingLocation ? 'PUT' : 'POST';
 
@@ -223,7 +221,7 @@ const PapaisCCTVDashboard = () => {
   const handleDeleteLocation = async (location) => {
     if (!window.confirm(`Anda yakin ingin menghapus lokasi "${location.name}"?`)) return;
     try {
-      const response = await fetch(`${API_URL_ADMIN}/locations/${location._id}`, {
+      const response = await fetch(`${API_URL_ADMIN}/locations/${location.id}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
@@ -251,7 +249,7 @@ const PapaisCCTVDashboard = () => {
   const filteredLocations = useMemo(() =>
     locations.filter(loc =>
       (loc.name && loc.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (loc.address && loc.address.toLowerCase().includes(searchQuery.toLowerCase()))
+      (loc.slug && loc.slug.toLowerCase().includes(searchQuery.toLowerCase()))
     ), [locations, searchQuery]
   );
 

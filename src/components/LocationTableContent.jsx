@@ -26,17 +26,17 @@ const LocationTableContent = ({ locations, searchQuery, onSearchChange, onAddNew
           <thead>
             <tr>
               <th>Nama Lokasi</th>
-              <th>Alamat</th>
-              <th>Koordinat (Lat, Lng)</th>
+              <th>Slug</th>
+              <th>Tipe Lokasi</th>
               <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
             {locations.map((loc) => (
-              <tr key={loc._id}>
+              <tr key={loc.id}>
                 <td>{loc.name}</td>
-                <td>{loc.address}</td>
-                <td>{loc.latitude}, {loc.longitude}</td>
+                <td>{loc.slug}</td>
+                <td>{loc.type}</td>
                 <td className={styles.actions}>
                   <button className={`${styles.actionBtn} ${styles.edit}`} title="Edit" onClick={() => onEdit(loc)}>
                     <Edit2 size={16} />
