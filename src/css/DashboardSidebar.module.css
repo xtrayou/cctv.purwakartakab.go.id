@@ -1,0 +1,130 @@
+.sidebar {
+  width: 250px;
+  background-color: #1e293b;
+  border-right: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transition: transform 0.3s ease-in-out;
+}
+
+.logoContainer {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #334155;
+}
+
+.logo {
+  height: 40px;
+}
+
+.logoContainer h2 {
+  font-size: 20px;
+  color: #fff;
+}
+
+.menu {
+  flex-grow: 1;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #cbd5e1;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu a:hover {
+  background-color: #334155;
+  color: #fff;
+}
+
+.menu a.active {
+  background-color: #2772F8; /* Ganti dengan warna biru Anda */
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(39, 114, 248, 0.3);
+}
+
+.sidebarFooter {
+  padding: 24px 16px;
+  border-top: 1px solid #334155;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #cbd5e1;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  background-color: #334155;
+  color: #fff;
+}
+
+/* --- Mobile Sidebar --- */
+.mobileSidebarOverlay {
+  display: none; /* Default hidden di desktop */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1001;
+}
+
+.mobileSidebar {
+  width: 250px;
+  background-color: #1e293b;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.closeMobileMenu {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Media query untuk mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%); /* Sembunyikan sidebar desktop di mobile */
+  }
+  
+  .mobileSidebarOverlay {
+    display: block; /* Tampilkan overlay di mobile (jika state open) */
+  }
+}

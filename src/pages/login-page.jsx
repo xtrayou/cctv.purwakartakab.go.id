@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, UserRound } from "lucide-react";
 import "./login-page.css";
-import Footer from "../components/footer";
+
+const API_URL = "http://localhost:8000/api/admin";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -20,30 +21,29 @@ const LoginPage = () => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
-    if (errors[name]) {
+    // Hapus error saat pengguna mulai mengetik
+    if (errors[name] || errors.general) {
       setErrors(prev => ({
         ...prev,
-        [name]: ""
+        [name]: "",
+        general: ""
       }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
     if (!formData.username.trim()) {
       newErrors.username = "Username wajib diisi";
     }
-    
     if (!formData.password.trim()) {
       newErrors.password = "Password wajib diisi";
     }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // MODIFIKASI: Ini adalah fungsi handleSubmit yang terhubung ke backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -52,32 +52,48 @@ const LoginPage = () => {
     }
 
     setIsLoading(true);
-    
+    setErrors({});
+
     try {
-      // Simulate API call - ganti dengan API sesungguhnya
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Validasi credentials (ganti dengan validasi sesungguhnya)
-      if (formData.username === "admin" && formData.password === "admin123") {
-        // Set login status ke localStorage
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userInfo", JSON.stringify({
+      const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           username: formData.username,
-          loginTime: new Date().toISOString()
-        }));
-        
-        // Redirect ke splash screen
-        navigate("/splashscreen");
-      } else {
-        setErrors({ general: "Username atau password salah!" });
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Tangkap pesan error dari backend (misal: "password salah")
+        throw new Error(data.error || `Error ${response.status}: Login gagal`);
       }
+
+      // --- LOGIN BERHASIL ---
+      if (data.token) {
+        // Simpan token ke localStorage
+        localStorage.setItem('admin_token', data.token);
+        
+        // Arahkan ke dashboard admin
+        navigate('/siadmin'); // Ganti dari /splashscreen
+      } else {
+        throw new Error('Token tidak diterima dari server.');
+      }
+
     } catch (error) {
-      setErrors({ general: "Login gagal. Silakan coba lagi." });
+      // Tangkap error (baik dari fetch network atau dari throw di atas)
+      setErrors({ general: error.message });
     } finally {
       setIsLoading(false);
     }
   };
 
+  // --- JSX (Tampilan Lama Anda) ---
+  // (Tidak ada perubahan di bawah ini)
   return (
     <div className="login-page">
       {/* 1. Latar Belakang Dekoratif (Blobs) */}
@@ -129,6 +145,8 @@ const LoginPage = () => {
                 disabled={isLoading}
               />
             </div>
+            {/* Tampilkan error validasi username */}
+            {errors.username && <div className="error-text-validation">{errors.username}</div>}
 
             <div className="input-group">
               <Lock className="input-icon" />
@@ -143,7 +161,10 @@ const LoginPage = () => {
                 disabled={isLoading}
               />
             </div>
+            {/* Tampilkan error validasi password */}
+            {errors.password && <div className="error-text-validation">{errors.password}</div>}
 
+            {/* Tampilkan error umum (misal: "Password salah") */}
             {errors.general && (
               <div style={{
                 color: '#ef4444',
@@ -164,15 +185,6 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* Demo credentials info */}
-          <div style={{
-            marginTop: '1rem',
-            fontSize: '0.8rem',
-            color: '#94a3b8',
-            textAlign: 'center'
-          }}>
-            Demo: admin / admin123
-          </div>
         </section>
         
       </main>
@@ -181,4 +193,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-export { Footer };

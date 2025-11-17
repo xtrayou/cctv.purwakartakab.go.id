@@ -1,0 +1,69 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background-color: #0f172a;
+  border-bottom: 1px solid #334155;
+  width: 100%;
+}
+
+.header h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.headerLogoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: none;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.headerLogoutBtn:hover {
+  background-color: #334155;
+  color: #fff;
+}
+
+/* Tombol toggle mobile */
+.mobileMenuToggle {
+  display: none; /* Sembunyikan di desktop */
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 16px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .header h2 {
+    display: none; /* Sembunyikan judul di mobile */
+  }
+
+  .mobileMenuToggle {
+    display: block; /* Tampilkan tombol toggle */
+  }
+
+  .headerLogoutBtn span {
+    display: none; /* Sembunyikan teks logout, sisakan ikon */
+  }
+}

@@ -1,225 +1,227 @@
-/* --- 1. Global & Setup --- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        Helvetica, Arial, sans-serif;
-}
-
 /* --- 2. Kontainer Halaman Utama --- */
 .login-page {
-    display: flex;
-    /* Menggunakan flex untuk menengahkan konten */
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    /* Setidaknya setinggi layar */
-    width: 100%;
-    background-color: #121212;
-    color: #ffffff;
-    padding: 2rem;
-    /* Beri jarak di layar kecil */
-    position: relative;
-    /* Diperlukan untuk background-blobs */
-    overflow: hidden;
-    /* Mencegah blobs keluar layar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  color: #ffffff;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
 /* --- 3. Latar Belakang Dekoratif (Blobs) --- */
 .background-blobs {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    /* Di belakang konten */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .blob {
-    position: absolute;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    opacity: 0.5;
-    /* Disesuaikan dari '80' di kode Anda */
+  position: absolute;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.6;
 }
 
 .blob-blue-1 {
-    background-color: #000cff;
-    filter: blur(200px);
-    width: 350px;
-    top: 60%;
-    left: 5%;
+  width: 400px;
+  background-color: #2772f8; /* Biru */
+  top: -10%;
+  left: -15%;
 }
 
 .blob-blue-2 {
-    background-color: #000cff;
-    filter: blur(200px);
-    width: 350px;
-    top: 10%;
-    right: 5%;
+  width: 350px;
+  background-color: #3b82f6; /* Biru muda */
+  bottom: -15%;
+  right: -10%;
 }
 
 .blob-orange {
-    background-color: #ff6100;
-    filter: blur(150px);
-    width: 350px;
-    top: 70%;
-    left: 15%;
+  width: 300px;
+  background-color: #ff6100; /* Oranye */
+  top: 30%;
+  left: 40%;
+  opacity: 0.4;
 }
 
-/* --- 4. Card Login Utama (Grid) --- */
+/* --- 4. Kartu Login Utama (2 Kolom) --- */
 .login-card {
-    display: grid;
-    /* Membuat 2 kolom, kolom kedua sedikit lebih kecil */
-    grid-template-columns: 1.2fr 1fr;
-    gap: 3rem;
-    /* Jarak antar kolom */
-    width: 100%;
-    max-width: 1200px;
-    /* Batas lebar maksimum */
-    z-index: 1;
-    /* Di atas blobs */
-
-    /* Efek glassmorphism agar terlihat 'mengambang' */
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 kolom sama besar */
+  width: 100%;
+  max-width: 1100px; /* Lebar maksimum kartu */
+  background: rgba(18, 18, 18, 0.8); /* Latar semi-transparan */
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  z-index: 1; /* Di atas blobs */
 }
 
-/* --- 5. Kolom Kiri: Branding --- */
+/* --- 5. Kolom Kiri (Branding) --- */
 .branding-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* Pusatkan konten secara vertikal */
-    gap: 1.5rem;
-    /* Jarak antar elemen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .branding-title-img {
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    /* Jaga rasio aspek */
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin-bottom: 2rem;
 }
 
 .branding-logo-img {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
+  width: 320px;
+  height: auto;
+  margin-bottom: 1.5rem;
 }
 
 .branding-description {
-    font-family: "Inter-Light", Helvetica;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.6;
-    color: #d1d1d1;
-    max-width: 500px;
-    /* Batasi lebar teks */
-    /* -webkit-text-stroke: 1px #000000; <- Ini mungkin tidak Anda inginkan */
+  font-size: 0.9rem;
+  color: #a0a0a0; /* Abu-abu muda */
+  line-height: 1.6;
+  text-align: justify;
 }
 
-/* --- 6. Kolom Kanan: Form Login --- */
+/* --- 6. Kolom Kanan (Form) --- */
 .login-form-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* Pusatkan semua item form */
-    justify-content: center;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
 }
 
 .login-avatar {
-    width: 150px;
-    height: 150px;
-    color: rgba(255, 255, 255, 0.6);
-    stroke-width: 1;
+  width: 80px;
+  height: 80px;
+  stroke-width: 1.5;
+  color: #ff6100; /* Oranye */
+  margin: 0 auto 1.5rem auto;
 }
 
 .login-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    /* Batasi lebar form */
-    gap: 1.5rem;
-    /* Jarak antar input */
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .input-group {
-    position: relative;
-    /* Untuk ikon di dalamnya */
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .input-icon {
-    position: absolute;
-    left: 20px;
-    color: #ffffff;
-    width: 20px;
-    height: 20px;
+  position: absolute;
+  left: 20px;
+  color: #a0a0a0; /* Abu-abu */
+  width: 20px;
+  height: 20px;
 }
 
 .input-field {
-    width: 100%;
-    padding: 1rem 1rem 1rem 3.5rem;
-    /* Padding kiri untuk ikon */
-    background: transparent;
-    border: 1px solid #ffffff;
-    border-radius: 50px;
-    color: #ffffff;
-    font-size: 1rem;
+  width: 100%;
+  padding: 1rem 1rem 1rem 3.5rem;
+  background: transparent;
+  border: 1px solid #ffffff;
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-field::placeholder {
-    color: #a0a0a0;
+  color: #a0a0a0;
 }
 
 .input-field:focus {
-    outline: none;
-    border-color: #ff6100;
-    box-shadow: 0 0 10px rgba(255, 97, 0, 0.5);
+  outline: none;
+  border-color: #ff6100; /* Oranye */
+  box-shadow: 0 0 10px rgba(255, 97, 0, 0.5);
+}
+
+/* BARU: Style untuk error validasi (yang ada di JSX) */
+.error-text-validation {
+  color: #ef4444; /* Merah */
+  font-size: 0.875rem;
+  padding-left: 1.5rem;
+  margin-top: -0.75rem;
 }
 
 .login-button {
-    padding: 1rem;
-    background-color: #ff610080;
-    /* Warna oranye transparan */
-    border: none;
-    border-radius: 50px;
-    color: #ffffff;
-    font-family: "Inter-Medium", Helvetica;
-    font-size: 1.25rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 1rem;
+  background-color: rgba(255, 97, 0, 0.5); /* Oranye transparan */
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .login-button:hover {
-    background-color: rgba(255, 97, 0, 0.8);
-    /* Lebih pekat saat di-hover */
+  background-color: #ff6100; /* Oranye solid */
+  transform: translateY(-2px);
 }
 
-/* --- 7. Responsif --- */
-@media (max-width: 1024px) {
-    .login-card {
-        /* Ubah jadi 1 kolom di layar tablet/HP */
-        grid-template-columns: 1fr;
-        max-width: 600px;
-    }
+.login-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  transform: none;
+}
 
-    .branding-section {
-        align-items: center;
-        /* Pusatkan branding di layar kecil */
-        text-align: center;
-    }
+/* --- 7. Footer (Jika ada) --- */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  width: 100%;
+}
+
+/* --- 8. Media Queries (Responsif) --- */
+@media (max-width: 900px) {
+  .login-card {
+    grid-template-columns: 1fr; /* Tumpuk kolom */
+    max-width: 500px;
+  }
+
+  .branding-section {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .login-page {
+    padding: 1rem;
+  }
+
+  .login-card {
+    background: none;
+    backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .branding-section,
+  .login-form-section {
+    padding: 1.5rem;
+  }
 }
