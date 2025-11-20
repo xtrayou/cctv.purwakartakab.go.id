@@ -49,6 +49,11 @@
   padding-bottom: 20px; 
 }
 
+.videoWrapper {
+  position: relative;
+  width: 100%;
+}
+
 .videoPlaceholder {
   width: 100%;
   height: auto;
@@ -60,20 +65,30 @@
   min-height: 500px;
 }
 
+/* Sembunyikan menu playback speed di Chrome/Edge */
+video::-webkit-media-controls-overflow-button {
+  display: none !important;
+}
+
+video::-internal-media-controls-overflow-button {
+  display: none !important;
+}
+
 .liveBadge {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  bottom: 65px;
+  left: 12px;
   background: #ff0000;
   color: #ffffff;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 700;
-  z-index: 3;
-  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.5);
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  pointer-events: none;
 }
 
 .videoInfoBelow {

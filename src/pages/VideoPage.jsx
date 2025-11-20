@@ -164,14 +164,16 @@ const VideoPage = () => {
               
               {/* Video Utama (Kiri) */}
               <div className={styles.mainSection}>
-                <span className={styles.liveBadge}>LIVE</span>
-                <HlsPlayer
-                  url={getHlsUrl(featuredVideo._id || featuredVideo.id)}
-                  playing={true}
-                  controls={true}
-                  muted={true}
-                  className={styles.videoPlaceholder}
-                />
+                <div className={styles.videoWrapper}>
+                  <span className={styles.liveBadge}>LIVE</span>
+                  <HlsPlayer
+                    url={getHlsUrl(featuredVideo._id || featuredVideo.id)}
+                    playing={true}
+                    controls={true}
+                    muted={true}
+                    className={styles.videoPlaceholder}
+                  />
+                </div>
                 <div className={styles.videoInfoBelow}>
                   <h2 className={styles.videoTitle}>{featuredVideo.name}</h2>
                   <p className={styles.videoLocation}>

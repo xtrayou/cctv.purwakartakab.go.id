@@ -69,14 +69,37 @@ const HlsPlayer = ({ url, controls = false, playing = false, muted = false, clas
     };
   }, [url, playing, muted]); // Tetap jalankan ulang effect jika prop ini berubah
 
+  // Mencegah playback speed dan reset otomatis ke 1.0
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Reset playback rate ke 1.0 jika diubah
+    const resetPlaybackRate = () => {
+      if (video.playbackRate !== 1.0) {
+        video.playbackRate = 1.0;
+      }
+    };
+
+    // Monitor perubahan playback rate
+    video.addEventListener('ratechange', resetPlaybackRate);
+
+    return () => {
+      video.removeEventListener('ratechange', resetPlaybackRate);
+    };
+  }, []);
+
   return (
     <video
       ref={videoRef}
       controls={controls}
+      controlsList="nodownload noremoteplayback noplaybackrate"
+      disablePictureInPicture
+      disableRemotePlayback
       muted={muted}
       style={{ width: '100%', height: '100%' }}
       playsInline
-      className={className} // <-- 6. Tambahkan className agar styling tetap berfungsi
+      className={className}
     />
   );
 };
