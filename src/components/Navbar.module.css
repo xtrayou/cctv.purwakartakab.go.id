@@ -12,15 +12,12 @@
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   
-  /* PERBAIKAN POSISI STICKY */
-  position: fixed; /* Ubah dari sticky ke fixed */
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000; /* Tingkatkan z-index */
+  /* Posisi Relatif (Tidak Sticky) */
+  position: relative; 
+  z-index: 100;
   
   /* Ukuran */
-  width: 100vw; /* Pastikan memenuhi viewport */
+  width: 100%;
   box-sizing: border-box;
   min-height: 70px;
   
@@ -225,25 +222,57 @@
   .navbar {
     flex-direction: column;
     align-items: center;
-    gap: clamp(16px, 2vw, 20px);
-    padding: clamp(16px, 3vw, 20px);
+    gap: 16px;
+    padding: 16px 20px;
+    min-height: auto;
+  }
+  
+  .logo {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .logoImage {
+    height: 32px;
+  }
+  
+  .logoText {
+    font-size: 18px;
   }
   
   .searchContainer {
     width: 100%;
     max-width: none;
   }
+  
+  .searchBar {
+    padding: 10px 14px 10px 18px;
+  }
+  
+  .searchInput {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 480px) {
   .navbar {
-    padding: 16px;
-    gap: 16px;
+    padding: 12px 16px;
+    gap: 12px;
+    min-height: auto;
   }
   
   .logo {
     justify-content: center;
     width: 100%;
+    gap: 8px;
+  }
+  
+  .logoImage {
+    height: 28px;
+  }
+  
+  .logoText {
+    font-size: 16px;
   }
 
   .searchContainer {
@@ -251,7 +280,28 @@
   }
 
   .searchBar {
-    padding: 6px 10px 6px 16px;
+    padding: 8px 12px 8px 16px;
+  }
+  
+  .searchInput {
+    font-size: 13px;
+  }
+  
+  .searchButton {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .dropdownMenu {
+    max-height: 250px;
+  }
+  
+  .locationText {
+    font-size: 13px;
+  }
+  
+  .locationSubtext {
+    font-size: 11px;
   }
 }
 
