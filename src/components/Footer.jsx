@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="footer-container">
       <p className="footer-text">
-        &copy; 2025 Papais CCTV dev Gilang Andhika & Silmi Yushini
+        &copy; 2025 Papais CCTV Diskominfo Kab. Purwakarta
       </p>
     </footer>
   );

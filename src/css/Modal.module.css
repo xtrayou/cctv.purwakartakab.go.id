@@ -40,7 +40,7 @@
 .closeBtn {
   background: none;
   border: none;
-  color: #94a3b8;
+  color: #ffffff;
   cursor: pointer;
 }
 .closeBtn:hover {
@@ -64,7 +64,7 @@
 .formGroup label {
   font-size: 14px;
   font-weight: 500;
-  color: #cbd5e1;
+  color: #ffffff;
 }
 
 .formGroup span {

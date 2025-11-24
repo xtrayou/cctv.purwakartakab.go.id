@@ -75,6 +75,21 @@
   padding: 3rem;
   text-align: center;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(22deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 23%, rgba(0, 212, 255, 1) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .branding-title-img {
@@ -103,6 +118,8 @@
   flex-direction: column;
   justify-content: center;
   padding: 3rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
 }
 
 .login-avatar {
@@ -128,7 +145,7 @@
 .input-icon {
   position: absolute;
   left: 20px;
-  color: #a0a0a0; /* Abu-abu */
+  color: #6b7280; /* Abu-abu gelap */
   width: 20px;
   height: 20px;
 }
@@ -136,22 +153,23 @@
 .input-field {
   width: 100%;
   padding: 1rem 1rem 1rem 3.5rem;
-  background: transparent;
-  border: 1px solid #ffffff;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #d1d5db;
   border-radius: 50px;
-  color: #ffffff;
+  color: #1f2937;
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-field::placeholder {
-  color: #a0a0a0;
+  color: #9ca3af;
 }
 
 .input-field:focus {
   outline: none;
   border-color: #ff6100; /* Oranye */
-  box-shadow: 0 0 10px rgba(255, 97, 0, 0.5);
+  box-shadow: 0 0 10px rgba(255, 97, 0, 0.3);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 /* BARU: Style untuk error validasi (yang ada di JSX) */
@@ -162,27 +180,102 @@
   margin-top: -0.75rem;
 }
 
+/* Captcha Styles */
+.captcha-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.captcha-canvas {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 240, 0.95));
+  border: 2px solid rgba(255, 97, 0, 0.4);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 65px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 
+              inset 0 1px 3px rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.captcha-canvas canvas {
+  max-width: 100%;
+  height: auto !important;
+  border-radius: 6px;
+  filter: contrast(1.1) brightness(1.05);
+}
+
+/* Sembunyikan teks "Reload Captcha" dari library */
+.captcha-canvas a,
+.captcha-canvas span:not(canvas *) {
+  display: none !important;
+}
+
+.captcha-reload-btn {
+  background: linear-gradient(135deg, rgba(255, 97, 0, 0.85), rgba(255, 97, 0, 0.65));
+  border: 2px solid rgba(255, 97, 0, 0.9);
+  border-radius: 12px;
+  padding: 0.75rem;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 50px;
+  height: 50px;
+  box-shadow: 0 4px 12px rgba(255, 97, 0, 0.4),
+              inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  font-size: 0; /* Sembunyikan teks */
+}
+
+.captcha-reload-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ff6100, #ff8533);
+  transform: rotate(90deg) scale(1.05);
+  box-shadow: 0 6px 16px rgba(255, 97, 0, 0.6),
+              inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.captcha-reload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.captcha-reload-btn svg {
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
 .login-button {
   padding: 1rem;
-  background-color: rgba(255, 97, 0, 0.5); /* Oranye transparan */
+  background: linear-gradient(135deg, #ff6100, #ff8533);
   border: none;
   border-radius: 50px;
   color: #ffffff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 97, 0, 0.4);
 }
 
 .login-button:hover {
-  background-color: #ff6100; /* Oranye solid */
+  background: linear-gradient(135deg, #ff7a1f, #ff9d52);
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 97, 0, 0.5);
 }
 
 .login-button:disabled {
-  background-color: #555;
+  background: #9ca3af;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 /* --- 7. Footer (Jika ada) --- */
